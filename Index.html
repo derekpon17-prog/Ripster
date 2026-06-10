@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ripster — Know What You've Made</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0A0A0B;
+    --surface: #141416;
+    --surface2: #1A1A1E;
+    --border: #1E1E24;
+    --border2: #2A2A32;
+    --amber: #F5A623;
+    --amber-dim: #C47D0E;
+    --amber-glow: rgba(245,166,35,0.12);
+    --green: #22C55E;
+    --red: #EF4444;
+    --white: #FFFFFF;
+    --gray1: #8A8A9A;
+    --gray2: #5A5A6A;
+    --gray3: #2E2E38;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: inline-block;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray1);
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--amber);
+    color: #000 !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: background 0.2s, transform 0.1s !important;
+  }
+
+  .nav-cta:hover {
+    background: #FFB940 !important;
+    color: #000 !important;
+    transform: translateY(-1px);
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(245,166,35,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(245,166,35,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: var(--amber-glow);
+    border: 1px solid rgba(245,166,35,0.2);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--amber);
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--gray1);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: var(--amber);
+    color: #000;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-primary:hover {
+    background: #FFB940;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(245,166,35,0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--border2);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gray2);
+    background: var(--surface);
+  }
+
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 72px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    background: var(--surface);
+    position: relative;
+  }
+
+  .ticker-wrap::before,
+  .ticker-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .ticker-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, var(--surface), transparent);
+  }
+
+  .ticker-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, var(--surface), transparent);
+  }
+
+  .ticker {
+    display: flex;
+    gap: 0;
+    animation: ticker-scroll 32s linear infinite;
+    width: max-content;
+  }
+
+  @keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 32px;
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .ticker-card {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .ticker-platform {
+    font-size: 11px;
+    color: var(--gray1);
+    font-family: var(--font-mono);
+  }
+
+  .ticker-gain {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+
+  .platforms-section {
+    padding: 64px 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .platforms-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray2);
+    margin-bottom: 32px;
+    font-family: var(--font-mono);
+  }
+
+  .platform-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .platform-logo {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray2);
+    letter-spacing: -0.02em;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .platform-logo:hover { color: var(--gray1); }
+
+  .platform-logo .badge {
+    font-size: 9px;
+    font-family: var(--font-mono);
+    background: var(--amber-glow);
+    color: var(--amber);
+    border: 1px solid rgba(245,166,35,0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .preview-section {
+    padding: 100px 48px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--gray1);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  .dashboard-frame {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  .dashboard-topbar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .topbar-dots span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border2);
+  }
+
+  .topbar-dots span:nth-child(1) { background: #FF5F57; }
+  .topbar-dots span:nth-child(2) { background: #FEBC2E; }
+  .topbar-dots span:nth-child(3) { background: #28C840; }
+
+  .topbar-url {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray2);
+    background: var(--border);
+    padding: 4px 16px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .dashboard-inner {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 560px;
+  }
+
+  .dash-sidebar {
+    background: var(--surface2);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+  }
+
+  .dash-sidebar-logo {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.03em;
+  }
+
+  .dash-sidebar-logo .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+
+  .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray1);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .sidebar-nav-item:hover {
+    background: var(--border);
+    color: var(--white);
+  }
+
+  .sidebar-nav-item.active {
+    color: var(--amber);
+    border-left-color: var(--amber);
+    background: var(--amber-glow);
+  }
+
+  .sidebar-section-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray2);
+    padding: 16px 20px 6px;
+  }
+
+  .sidebar-platform {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px;
+    font-size: 12px;
+    color: var(--gray1);
+  }
+
+  .platform-status {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .status-live { background: var(--green); }
+  .status-pending { background: var(--amber); }
+
+  .dash-main {
+    padding: 28px;
+    overflow: hidden;
+  }
+
+  .dash-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .dash-greeting {
+    font-size: 11px;
+    color: var(--gray1);
+    font-family: var(--font-mono);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .dash-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .dash-period {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .period-btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border2);
+    color: var(--gray1);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.15s;
+  }
+
+  .period-btn.active {
+    background: var(--amber);
+    color: #000;
+    border-color: var(--amber);
+    font-weight: 600;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--border2); }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray2);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-delta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .card-table {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray2);
+  }
+
+  .th:not(:first-child) { text-align: right; }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    align-items: center;
+  }
+
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: rgba(255,255,255,0.02); }
+
+  .card-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card-name-primary {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  .card-name-secondary {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray2);
+  }
+
+  .td {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .badge-platform {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--border);
+    color: var(--gray1);
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+
+  .how-section {
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 56px;
+  }
+
+  .how-card {
+    background: var(--surface);
+    padding: 40px 36px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .how-card:hover {
+    border-color: var(--border2);
+    background: var(--surface2);
+  }
+
+  .how-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--amber);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .how-card:hover::before { opacity: 1; }
+
+  .how-number {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .how-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .how-body {
+    font-size: 14px;
+    color: var(--gray1);
+    line-height: 1.7;
+  }
+
+  .tax-section {
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .tax-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .tax-features {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .tax-feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .tax-feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--amber-glow);
+    border: 1px solid rgba(245,166,35,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .tax-feature-text h4 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .tax-feature-text p {
+    font-size: 13px;
+    color: var(--gray1);
+    line-height: 1.6;
+  }
+
+  .tax-mockup {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  }
+
+  .tax-mockup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .tax-mockup-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .export-btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: var(--amber);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+
+  .tax-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .tax-row:last-child { border-bottom: none; }
+
+  .tax-row-label {
+    color: var(--gray1);
+    font-size: 12px;
+  }
+
+  .tax-row-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .tax-total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid var(--border2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tax-total-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .tax-total-value {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--green);
+  }
+
+  .connect-section {
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .connect-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .connect-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 48px;
+    margin-top: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .connect-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,166,35,0.06), transparent);
+    pointer-events: none;
+  }
+
+  .connect-platform-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin-bottom: 28px;
+  }
+
+  .ebay-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .ebay-logo span:nth-child(1) { color: #e53238; }
+  .ebay-logo span:nth-child(2) { color: #f45c34; }
+  .ebay-logo span:nth-child(3) { color: #0064d2; }
+  .ebay-logo span:nth-child(4) { color: #86b817; }
+
+  .connect-badge-text {
+    font-size: 13px;
+    color: var(--gray1);
+    font-weight: 500;
+  }
+
+  .connect-card h3 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+  }
+
+  .connect-card p {
+    font-size: 15px;
+    color: var(--gray1);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .connect-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    margin-bottom: 32px;
+  }
+
+  .connect-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--gray1);
+  }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--amber-glow);
+    border: 1px solid rgba(245,166,35,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--amber);
+    flex-shrink: 0;
+  }
+
+  .pricing-section {
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+
+  .pricing-card:hover { border-color: var(--border2); }
+
+  .pricing-card.featured {
+    border-color: var(--amber);
+    background: var(--surface2);
+  }
+
+  .pricing-card.featured::after {
+    content: 'Most Popular';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--amber);
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+
+  .pricing-tier {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray1);
+    margin-bottom: 16px;
+  }
+
+  .pricing-price {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .pricing-price span {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--gray1);
+    letter-spacing: -0.01em;
+  }
+
+  .pricing-period {
+    font-size: 13px;
+    color: var(--gray2);
+    margin-bottom: 28px;
+  }
+
+  .pricing-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+
+  .pricing-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .pricing-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--gray1);
+  }
+
+  .pricing-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .pricing-features li.muted { color: var(--gray2); }
+  .pricing-features li.muted::before { color: var(--gray2); content: '–'; }
+
+  .cta-section {
+    padding: 120px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(245,166,35,0.07), transparent);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 700px;
+    margin: 0 auto 20px;
+  }
+
+  .cta-section p {
+    font-size: 17px;
+    color: var(--gray1);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-logo .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--gray2);
+    font-family: var(--font-mono);
+  }
+
+  .footer-disclaimer {
+    font-size: 11px;
+    color: var(--gray2);
+    max-width: 400px;
+    line-height: 1.6;
+    text-align: right;
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    color: var(--gray1);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .modal-close:hover { background: var(--border2); }
+
+  .modal h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .modal p {
+    font-size: 14px;
+    color: var(--gray1);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .oauth-btn {
+    width: 100%;
+    background: #0064d2;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: -0.01em;
+  }
+
+  .oauth-btn:hover {
+    background: #0057bb;
+    transform: translateY(-1px);
+  }
+
+  .oauth-ebay-logo {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .oauth-ebay-logo span:nth-child(1) { color: #fff; }
+  .oauth-ebay-logo span:nth-child(2) { color: #ffcc00; }
+  .oauth-ebay-logo span:nth-child(3) { color: #fff; }
+  .oauth-ebay-logo span:nth-child(4) { color: #86b817; }
+
+  .modal-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--gray2);
+    text-align: center;
+    font-family: var(--font-mono);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .dashboard-inner { grid-template-columns: 1fr; }
+    .dash-sidebar { display: none; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .how-grid { grid-template-columns: 1fr; }
+    .tax-inner { grid-template-columns: 1fr; gap: 48px; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .platforms-section, .preview-section, .how-section, .tax-section,
+    .connect-section, .pricing-section, .cta-section { padding: 60px 24px; }
+    .table-header, .table-row { grid-template-columns: 2fr 1fr 1fr; }
+    .th:nth-child(4), .th:nth-child(5),
+    .td:nth-child(4), .td:nth-child(5) { display: none; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-disclaimer { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    Ripster <span class="dot"></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#tax">Tax tools</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#" class="nav-cta" onclick="document.getElementById('ebay-modal').classList.add('open'); return false;">Connect eBay</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow">Now in beta — eBay sync live</div>
+  <h1>Know exactly what<br>you've <em>made</em>.</h1>
+  <p class="hero-sub">Ripster connects your eBay, PayPal, and email to give every collector and reseller a real P&L — with tax output built in.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary" onclick="document.getElementById('ebay-modal').classList.add('open'); return false;">Connect eBay — it's free</a>
+    <a href="#how" class="btn-secondary">See how it works</a>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item"><span class="ticker-card">2023 Topps Chrome Shohei Ohtani RC PSA 10</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$184.50</span></div>
+    <div class="ticker-item"><span class="ticker-card">2003-04 Topps Chrome LeBron James RC BGS 9.5</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$2,840.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">Charizard Holo 1st Edition PSA 9</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$1,120.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2021 Panini Prizm Justin Herbert RC PSA 10</span><span class="ticker-platform">eBay</span><span class="ticker-gain down">−$42.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2020 Topps Update Fernando Tatis Jr. SSP</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$312.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">Mewtwo Holo Base Set PSA 8</span><span class="ticker-platform">PayPal</span><span class="ticker-gain up">+$88.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2019 Prizm Luka Doncic Silver RC PSA 10</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$3,200.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2022 Bowman Chrome Juan Soto Auto /50</span><span class="ticker-platform">eBay</span><span class="ticker-gain down">−$28.50</span></div>
+    <div class="ticker-item"><span class="ticker-card">2023 Topps Chrome Shohei Ohtani RC PSA 10</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$184.50</span></div>
+    <div class="ticker-item"><span class="ticker-card">2003-04 Topps Chrome LeBron James RC BGS 9.5</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$2,840.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">Charizard Holo 1st Edition PSA 9</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$1,120.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2021 Panini Prizm Justin Herbert RC PSA 10</span><span class="ticker-platform">eBay</span><span class="ticker-gain down">−$42.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2020 Topps Update Fernando Tatis Jr. SSP</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$312.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">Mewtwo Holo Base Set PSA 8</span><span class="ticker-platform">PayPal</span><span class="ticker-gain up">+$88.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2019 Prizm Luka Doncic Silver RC PSA 10</span><span class="ticker-platform">eBay</span><span class="ticker-gain up">+$3,200.00</span></div>
+    <div class="ticker-item"><span class="ticker-card">2022 Bowman Chrome Juan Soto Auto /50</span><span class="ticker-platform">eBay</span><span class="ticker-gain down">−$28.50</span></div>
+  </div>
+</div>
+
+<section class="platforms-section">
+  <p class="platforms-label">Syncs automatically with</p>
+  <div class="platform-logos">
+    <span class="platform-logo">eBay <span class="badge">LIVE</span></span>
+    <span class="platform-logo">PayPal <span class="badge">COMING</span></span>
+    <span class="platform-logo">Fanatics Collect <span class="badge">COMING</span></span>
+    <span class="platform-logo">Goldin <span class="badge">COMING</span></span>
+    <span class="platform-logo">Venmo <span class="badge">COMING</span></span>
+    <span class="platform-logo">PSA API <span class="badge">COMING</span></span>
+  </div>
+</section>
+
+<section class="preview-section">
+  <div class="section-eyebrow">Your dashboard</div>
+  <h2 class="section-title">Every card.<br>Every platform.<br>One number.</h2>
+  <p class="section-sub">Your real P&L — not what the platform reported, but what you actually kept after fees, shipping, and cost basis.</p>
+  <div class="dashboard-frame">
+    <div class="dashboard-topbar">
+      <div class="topbar-dots"><span></span><span></span><span></span></div>
+      <span class="topbar-url">app.ripster.io/dashboard</span>
+      <div style="width:80px"></div>
+    </div>
+    <div class="dashboard-inner">
+      <div class="dash-sidebar">
+        <div class="dash-sidebar-logo"><span class="dot"></span> Ripster</div>
+        <div class="sidebar-nav-item active"><span>◼</span> Dashboard</div>
+        <div class="sidebar-nav-item"><span>◈</span> Portfolio</div>
+        <div class="sidebar-nav-item"><span>⟳</span> Transactions</div>
+        <div class="sidebar-nav-item"><span>◐</span> Tax Center</div>
+        <div class="sidebar-nav-item"><span>⬡</span> Grading</div>
+        <div class="sidebar-nav-item"><span>✉</span> Review Queue <span style="background:var(--amber);color:#000;font-size:10px;font-family:var(--font-mono);font-weight:700;padding:1px 6px;border-radius:100px;margin-left:auto">3</span></div>
+        <div class="sidebar-section-label">Platforms</div>
+        <div class="sidebar-platform"><span>eBay</span><span class="platform-status status-live"></span></div>
+        <div class="sidebar-platform"><span>PayPal</span><span class="platform-status status-pending"></span></div>
+        <div class="sidebar-platform"><span>Fanatics</span><span class="platform-status status-pending"></span></div>
+      </div>
+      <div class="dash-main">
+        <div class="dash-header">
+          <div>
+            <div class="dash-greeting">GOOD MORNING</div>
+            <div class="dash-title">Portfolio Overview</div>
+          </div>
+          <div class="dash-period">
+            <button class="period-btn">1M</button>
+            <button class="period-btn">3M</button>
+            <button class="period-btn active">YTD</button>
+            <button class="period-btn">All</button>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Invested</div>
+            <div class="stat-value">$14,820</div>
+            <div class="stat-delta" style="color:var(--gray2)">312 cards tracked</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Net Realized</div>
+            <div class="stat-value" style="color:var(--green)">+$6,284</div>
+            <div class="stat-delta up">↑ 42.4% ROI</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Unrealized</div>
+            <div class="stat-value">$9,140</div>
+            <div class="stat-delta up">+$1,820 est. gain</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tax Exposure</div>
+            <div class="stat-value" style="color:var(--amber)">$1,756</div>
+            <div class="stat-delta" style="color:var(--amber)">⚠ 4 cards near 1yr</div>
+          </div>
+        </div>
+        <div class="card-table">
+          <div class="table-header">
+            <div class="th">Card</div>
+            <div class="th">Platform</div>
+            <div class="th">Cost Basis</div>
+            <div class="th">Net Sold</div>
+            <div class="th">Gain/Loss</div>
+          </div>
+          <div class="table-row">
+            <div class="card-name"><span class="card-name-primary">LeBron James RC BGS 9.5</span><span class="card-name-secondary">2003-04 Topps Chrome · #111</span></div>
+            <div class="td"><span class="badge-platform">EBAY</span></div>
+            <div class="td" style="color:var(--gray1)">$1,200</div>
+            <div class="td">$4,040</div>
+            <div class="td up">+$2,840</div>
+          </div>
+          <div class="table-row">
+            <div class="card-name"><span class="card-name-primary">Shohei Ohtani RC PSA 10</span><span class="card-name-secondary">2023 Topps Chrome · #200</span></div>
+            <div class="td"><span class="badge-platform">EBAY</span></div>
+            <div class="td" style="color:var(--gray1)">$380</div>
+            <div class="td">$564</div>
+            <div class="td up">+$184</div>
+          </div>
+          <div class="table-row">
+            <div class="card-name"><span class="card-name-primary">Charizard Holo 1st Ed. PSA 9</span><span class="card-name-secondary">1999 Base Set · #4</span></div>
+            <div class="td"><span class="badge-platform">EBAY</span></div>
+            <div class="td" style="color:var(--gray1)">$2,800</div>
+            <div class="td">$3,920</div>
+            <div class="td up">+$1,120</div>
+          </div>
+          <div class="table-row">
+            <div class="card-name"><span class="card-name-primary">Justin Herbert RC PSA 10</span><span class="card-name-secondary">2021 Panini Prizm · #338</span></div>
+            <div class="td"><span class="badge-platform">EBAY</span></div>
+            <div class="td" style="color:var(--gray1)">$320</div>
+            <div class="td">$278</div>
+            <div class="td down">−$42</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section" id="how">
+  <div class="section-eyebrow">How it works</div>
+  <h2 class="section-title">Built for the way<br>collectors actually operate.</h2>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-number">01</div>
+      <h3 class="how-title">Connect once, sync forever</h3>
+      <p class="how-body">Connect your eBay account via OAuth. Ripster pulls your complete transaction history — every sale, every purchase, every fee — and keeps it updated automatically. No CSV files. No manual entry.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-number">02</div>
+      <h3 class="how-title">Every card gets an ID</h3>
+      <p class="how-body">Ripster's Card ID system links your purchase to its eventual sale — across any platform combination. Raw buy on PayPal, graded sale on eBay. The pairing is automatic. True per-card ROI, finally.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-number">03</div>
+      <h3 class="how-title">Tax output, not guesswork</h3>
+      <p class="how-body">Schedule D export. 1099-K reconciliation. Grading fee basis additions. Hobby vs. dealer classification tracking. The IRS complexity of collecting, handled automatically. Export to your CPA in one click.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tax-section" id="tax">
+  <div class="tax-inner">
+    <div>
+      <div class="section-eyebrow">Tax tools</div>
+      <h2 class="section-title">The 28% rate<br>is real. So is<br>your exposure.</h2>
+      <p class="section-sub">Collectibles are taxed differently than stocks. Ripster is the only tracker built specifically for this complexity.</p>
+      <div class="tax-features">
+        <div class="tax-feature">
+          <div class="tax-feature-icon">📋</div>
+          <div class="tax-feature-text">
+            <h4>Schedule D / Form 8949 export</h4>
+            <p>One-click export formatted exactly for your CPA — proceeds, cost basis, acquisition date, sale date, holding period, and short/long-term classification per card.</p>
+          </div>
+        </div>
+        <div class="tax-feature">
+          <div class="tax-feature-icon">⚡</div>
+          <div class="tax-feature-text">
+            <h4>1099-K reconciliation</h4>
+            <p>Your 1099-K reports gross sales — not your actual net gain. Ripster documents the difference automatically, including platform fees, shipping, and cost of goods.</p>
+          </div>
+        </div>
+        <div class="tax-feature">
+          <div class="tax-feature-icon">⏱</div>
+          <div class="tax-feature-text">
+            <h4>Holding period optimizer</h4>
+            <p>Alerts you when cards are approaching the one-year long-term threshold. For collectors in the 37% bracket, crossing it saves 9+ points on federal tax alone.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tax-mockup">
+      <div class="tax-mockup-header">
+        <div class="tax-mockup-title">2024 Tax Summary</div>
+        <button class="export-btn">Export CSV</button>
+      </div>
+      <div class="tax-row"><span class="tax-row-label">Gross eBay Sales (1099-K)</span><span class="tax-row-value" style="color:var(--white)">$28,400</span></div>
+      <div class="tax-row"><span class="tax-row-label">Platform Fees & Shipping</span><span class="tax-row-value" style="color:var(--red)">−$3,192</span></div>
+      <div class="tax-row"><span class="tax-row-label">Total Cost Basis</span><span class="tax-row-value" style="color:var(--red)">−$18,924</span></div>
+      <div class="tax-row"><span class="tax-row-label">Grading Fees Applied</span><span class="tax-row-value" style="color:var(--red)">−$840</span></div>
+      <div class="tax-row"><span class="tax-row-label">Short-term Gains</span><span class="tax-row-value up">$3,820</span></div>
+      <div class="tax-row"><span class="tax-row-label">Long-term Gains (28% rate)</span><span class="tax-row-value up">$1,624</span></div>
+      <div class="tax-total">
+        <span class="tax-total-label">Net Taxable Gain</span>
+        <span class="tax-total-value">$5,444</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="connect-section">
+  <div class="connect-inner">
+    <div class="section-eyebrow">Get started</div>
+    <h2 class="section-title">Connect your eBay.<br>See your real numbers.</h2>
+    <p class="section-sub">Takes 60 seconds. Read-only access. Cancel anytime.</p>
+    <div class="connect-card">
+      <div class="connect-platform-badge">
+        <div class="ebay-logo"><span>e</span><span>B</span><span>a</span><span>y</span></div>
+        <span class="connect-badge-text">Official OAuth Connection</span>
+      </div>
+      <h3>Your eBay, unlocked.</h3>
+      <p>Ripster connects via eBay's official developer API. We pull your full transaction history — sales, purchases, fees, and shipping — and turn it into a complete financial picture of your collecting activity.</p>
+      <div class="connect-steps">
+        <div class="connect-step"><span class="step-num">1</span><span>Click below to open eBay's secure authorization page</span></div>
+        <div class="connect-step"><span class="step-num">2</span><span>Sign in to your eBay account and grant read-only access</span></div>
+        <div class="connect-step"><span class="step-num">3</span><span>Ripster pulls your history and builds your dashboard</span></div>
+      </div>
+      <button class="btn-primary" style="width:100%; font-size:16px; padding:16px;" onclick="document.getElementById('ebay-modal').classList.add('open')">Connect eBay Account</button>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section" id="pricing">
+  <div class="section-eyebrow">Pricing</div>
+  <h2 class="section-title">Start free.<br>Upgrade when it matters.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Free</div>
+      <div class="pricing-price">$0</div>
+      <div class="pricing-period">forever</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>eBay sync (up to 500 transactions)</li>
+        <li>Card ID pairing system</li>
+        <li>Portfolio dashboard</li>
+        <li>Per-card ROI</li>
+        <li>Non-card transaction filter</li>
+        <li class="muted">Tax exports</li>
+        <li class="muted">Schedule D / 8949 export</li>
+        <li class="muted">Holding period optimizer</li>
+      </ul>
+      <a href="#" class="btn-secondary" style="display:block; text-align:center;" onclick="document.getElementById('ebay-modal').classList.add('open'); return false;">Get started free</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-tier">Pro</div>
+      <div class="pricing-price">$19 <span>/mo</span></div>
+      <div class="pricing-period">billed monthly</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Everything in Free</li>
+        <li>Unlimited transactions</li>
+        <li>Schedule D / Form 8949 export</li>
+        <li>1099-K reconciliation</li>
+        <li>Holding period tax optimizer</li>
+        <li>Hobby vs. dealer classification</li>
+        <li>Live market value layer</li>
+        <li>Performance analytics</li>
+      </ul>
+      <a href="#" class="btn-primary" style="display:block; text-align:center;" onclick="document.getElementById('ebay-modal').classList.add('open'); return false;">Start Pro free for 14 days</a>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Coming soon</div>
+      <div class="pricing-price">$—</div>
+      <div class="pricing-period">PayPal + email sync</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Everything in Pro</li>
+        <li>PayPal full transaction sync</li>
+        <li>Venmo email parsing</li>
+        <li>Fanatics Collect sync</li>
+        <li>Goldin auction sync</li>
+        <li>PSA grading integration</li>
+        <li>CPA export package</li>
+        <li>Box break cost allocator</li>
+      </ul>
+      <button class="btn-secondary" style="width:100%; cursor:default; opacity:0.5">Join waitlist</button>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Stop guessing.<br>Start <em style="font-style:normal;color:var(--amber)">knowing</em>.</h2>
+  <p>Connect your eBay account in 60 seconds and see your real P&L for the first time.</p>
+  <button class="btn-primary" style="font-size:17px; padding:16px 40px;" onclick="document.getElementById('ebay-modal').classList.add('open')">Connect eBay — Free</button>
+</section>
+
+<footer>
+  <div class="footer-logo"><span class="dot"></span> Ripster</div>
+  <div class="footer-note">© 2025 Ripster · All rights reserved</div>
+  <div class="footer-disclaimer">Ripster is a data organization tool, not a tax advisor. Consult a qualified CPA before filing.</div>
+</footer>
+
+<div class="modal-overlay" id="ebay-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('ebay-modal').classList.remove('open')">×</button>
+    <h3>Connect your eBay</h3>
+    <p>You'll be taken to eBay's secure sign-in page. Ripster requests read-only access to your transaction history. We never touch your listings, bids, or account settings.</p>
+    <button class="oauth-btn" onclick="initiateEbayOAuth()">
+      <div class="oauth-ebay-logo"><span>e</span><span>B</span><span>a</span><span>y</span></div>
+      Continue with eBay
+    </button>
+    <p class="modal-note">Read-only access · No card required · Cancel anytime<br>Your credentials go directly to eBay — Ripster never sees your password.</p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('ebay-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
+  function initiateEbayOAuth() {
+    const EBAY_APP_ID = 'YOUR_EBAY_APP_ID';
+    const REDIRECT_URI = 'YOUR_REDIRECT_URI';
+    const SCOPE = [
+      'https://api.ebay.com/oauth/api_scope',
+      'https://api.ebay.com/oauth/api_scope/sell.finances',
+      'https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly',
+      'https://api.ebay.com/oauth/api_scope/commerce.identity.readonly'
+    ].join('%20');
+
+    const state = Math.random().toString(36).substring(2);
+    sessionStorage.setItem('ebay_oauth_state', state);
+
+    const authUrl = `https://auth.ebay.com/oauth2/authorize` +
+      `?client_id=${EBAY_APP_ID}` +
+      `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+      `&response_type=code` +
+      `&scope=${SCOPE}` +
+      `&state=${state}`;
+
+    if (EBAY_APP_ID === 'YOUR_EBAY_APP_ID') {
+      document.querySelector('.modal p').innerHTML =
+        `<strong style="color:var(--amber)">POC Setup Required</strong><br><br>
+        To activate eBay OAuth:<br><br>
+        1. Register at <a href="https://developer.ebay.com" target="_blank" style="color:var(--amber)">developer.ebay.com</a><br>
+        2. Create an app and get your Client ID<br>
+        3. Set your RuName (redirect URI)<br>
+        4. Replace <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:12px">YOUR_EBAY_APP_ID</code> and <code style="background:var(--border);padding:2px 6px;border-radius:3px;font-size:12px">YOUR_REDIRECT_URI</code> in the script`;
+      return;
+    }
+
+    window.location.href = authUrl;
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('ebay-modal').classList.remove('open');
+  });
+</script>
+</body>
+</html>
