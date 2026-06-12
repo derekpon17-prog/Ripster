@@ -53,22 +53,27 @@
   .panel-head h2{font-family:var(--disp);font-size:16px;font-weight:700;letter-spacing:-.01em}
   .panel-head .hint{font-family:var(--mono);font-size:10.5px;color:var(--t3)}
 
-  table{width:100%;border-collapse:collapse}
-  th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);text-align:left;padding:10px 20px;border-bottom:1px solid var(--line)}
-  th.r,td.r{text-align:right}
-  td{padding:12px 20px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}
-  tr:last-child td{border-bottom:none}
-  tr:hover td{background:rgba(255,255,255,.015)}
-  td .desc{font-weight:500;letter-spacing:-.01em}
-  td .meta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
-  .num{font-family:var(--mono);font-size:12.5px;font-weight:500}
-  .gain{color:var(--green)} .loss{color:var(--red)} .dim{color:var(--t3)}
+  /* eBay-style transaction rows */
+  .txn{display:grid;grid-template-columns:64px 1fr auto;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);align-items:center}
+  .txn:last-child{border-bottom:none}
+  .txn:hover{background:rgba(255,255,255,.015)}
+  .thumb{width:64px;height:88px;border-radius:8px;object-fit:cover;border:1px solid var(--line-2);background:var(--raise-2);display:block}
+  .thumb-ph{width:64px;height:88px;border-radius:8px;border:1px solid var(--line-2);background:
+    radial-gradient(ellipse 70% 48% at 50% 30%, rgba(245,166,35,.18), transparent 70%),
+    linear-gradient(196deg,#22222A 0%,#16161C 60%,#1B1B23 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.08em}
+  .txn-mid .title{font-weight:600;font-size:14px;letter-spacing:-.01em;line-height:1.4;margin-bottom:5px}
+  .txn-mid .meta{font-family:var(--mono);font-size:10.5px;color:var(--t3);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
   .pill{font-family:var(--mono);font-size:9px;padding:2.5px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
   .pill.sale{background:rgba(47,213,113,.1);color:var(--green);border:1px solid rgba(47,213,113,.25)}
   .pill.purchase{background:rgba(244,86,78,.1);color:var(--red);border:1px solid rgba(244,86,78,.3)}
   .pill.other{background:var(--line);color:var(--t2);border:1px solid var(--line-2)}
   .pill.plat{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-edge)}
-
+  .txn-right{text-align:right;font-family:var(--mono)}
+  .txn-right .net{font-size:16px;font-weight:700;letter-spacing:-.02em}
+  .txn-right .sub{font-size:10.5px;color:var(--t3);margin-top:3px}
+  .gain{color:var(--green)} .loss{color:var(--red)} .dim{color:var(--t3)}
   .empty{padding:48px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:12px}
 
   /* Manual entry */
@@ -89,10 +94,12 @@
   .gate-card .btn{width:100%}
   .gate-err{font-family:var(--mono);font-size:11px;color:var(--red);margin-bottom:10px;display:none}
 
-  @media (max-width:900px){
+  @media (max-width:760px){
     .stats{grid-template-columns:repeat(2,1fr)}
     .form-grid{grid-template-columns:1fr}
-    th:nth-child(4),td:nth-child(4),th:nth-child(5),td:nth-child(5){display:none}
+    .txn{grid-template-columns:48px 1fr;grid-template-rows:auto auto}
+    .thumb,.thumb-ph{width:48px;height:66px}
+    .txn-right{grid-column:1/-1;text-align:left;display:flex;gap:14px;align-items:baseline}
   }
 </style>
 </head>
@@ -169,15 +176,8 @@
         <h2>Transactions</h2>
         <span class="hint" id="txCount">—</span>
       </div>
-      <div style="overflow-x:auto">
-        <table>
-          <thead>
-            <tr><th>Description</th><th>Type</th><th>Platform</th><th class="r">Gross</th><th class="r">Fees</th><th class="r">Net</th></tr>
-          </thead>
-          <tbody id="txBody">
-            <tr><td colspan="6" class="empty">Loading…</td></tr>
-          </tbody>
-        </table>
+      <div id="txList">
+        <div class="empty">Loading…</div>
       </div>
     </div>
   </div>
@@ -191,20 +191,17 @@
     var s = Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     return (v < 0 ? '−$' : '$') + s;
   }
-
   function fmtDate(d) {
     if (!d) return '';
-    var dt = new Date(d);
-    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
+  function esc(s) { return String(s || '').replace(/</g, '&lt;'); }
 
   function showGate(err) {
     document.getElementById('gate').style.display = 'flex';
     document.getElementById('gateErr').style.display = err ? 'block' : 'none';
   }
-  function hideGate() {
-    document.getElementById('gate').style.display = 'none';
-  }
+  function hideGate() { document.getElementById('gate').style.display = 'none'; }
 
   async function loadData() {
     try {
@@ -215,7 +212,7 @@
 
       document.getElementById('sCount').textContent = data.summary.sales_count;
       document.getElementById('sGross').textContent = fmt(data.summary.gross_sales);
-      document.getElementById('sFees').textContent = '−' + fmt(data.summary.total_fees).replace('$', '$');
+      document.getElementById('sFees').textContent = '−' + fmt(data.summary.total_fees);
       var netEl = document.getElementById('sNet');
       netEl.textContent = fmt(data.summary.net_total);
       netEl.className = 'v ' + (data.summary.net_total >= 0 ? 'gain' : 'loss');
@@ -224,27 +221,40 @@
       document.getElementById('txCount').textContent = rows.length + ' rows · newest first';
       document.getElementById('syncNote').textContent = 'Loaded ' + new Date().toLocaleTimeString();
 
-      var body = document.getElementById('txBody');
+      var list = document.getElementById('txList');
       if (!rows.length) {
-        body.innerHTML = '<tr><td colspan="6" class="empty">No transactions yet. Hit Sync eBay or add one manually.</td></tr>';
+        list.innerHTML = '<div class="empty">No transactions yet. Hit Sync eBay or add one manually.</div>';
         return;
       }
-      body.innerHTML = rows.map(function (t) {
+      list.innerHTML = rows.map(function (t) {
         var typeClass = t.txn_type === 'sale' ? 'sale' : (t.txn_type === 'purchase' ? 'purchase' : 'other');
         var net = Number(t.net_amount) || 0;
-        return '<tr>'
-          + '<td><div class="desc">' + (t.description || '—').replace(/</g, '&lt;') + '</div>'
-          + '<div class="meta">' + fmtDate(t.txn_date) + '</div></td>'
-          + '<td><span class="pill ' + typeClass + '">' + (t.txn_type || '—') + '</span></td>'
-          + '<td><span class="pill plat">' + (t.platform || '—') + '</span></td>'
-          + '<td class="r num dim">' + fmt(t.gross_amount) + '</td>'
-          + '<td class="r num dim">' + (Number(t.fees) ? '−' + fmt(t.fees) : '—') + '</td>'
-          + '<td class="r num ' + (net >= 0 ? 'gain' : 'loss') + '">' + fmt(net) + '</td>'
-          + '</tr>';
+        var img = t.image_url
+          ? '<img class="thumb" src="' + esc(t.image_url) + '" alt="" loading="lazy">'
+          : '<div class="thumb-ph">NO IMG</div>';
+        var metaBits = [fmtDate(t.txn_date)];
+        if (t.order_id) metaBits.push('Order ' + esc(t.order_id));
+        if (t.buyer) metaBits.push('Buyer ' + esc(t.buyer));
+        return '<div class="txn">'
+          + img
+          + '<div class="txn-mid">'
+          +   '<div class="title">' + esc(t.description || '—') + '</div>'
+          +   '<div class="meta">'
+          +     '<span class="pill ' + typeClass + '">' + esc(t.txn_type || '—') + '</span>'
+          +     '<span class="pill plat">' + esc(t.platform || '—') + '</span>'
+          +     metaBits.map(function (m) { return '<span>' + m + '</span>'; }).join('')
+          +   '</div>'
+          + '</div>'
+          + '<div class="txn-right">'
+          +   '<div class="net ' + (net >= 0 ? 'gain' : 'loss') + '">' + fmt(net) + '</div>'
+          +   '<div class="sub">' + fmt(t.gross_amount) + ' gross'
+          +     (Number(t.fees) ? ' · −' + fmt(t.fees) + ' fees' : '') + '</div>'
+          + '</div>'
+          + '</div>';
       }).join('');
     } catch (e) {
-      document.getElementById('txBody').innerHTML =
-        '<tr><td colspan="6" class="empty">Could not load data — check your connection and refresh.</td></tr>';
+      document.getElementById('txList').innerHTML =
+        '<div class="empty">Could not load data — check your connection and refresh.</div>';
     }
   }
 
@@ -267,7 +277,7 @@
       var res = await fetch('/api/ebay/sync?key=' + encodeURIComponent(KEY));
       var out = await res.json();
       document.getElementById('syncNote').textContent = out.ok
-        ? 'Synced ' + out.pulled_from_ebay + ' eBay transactions'
+        ? 'Synced ' + out.pulled_from_ebay + ' txns · ' + out.orders_enriched + ' orders enriched'
         : 'Sync error — see console';
       if (!out.ok) console.error(out);
       await loadData();
@@ -304,10 +314,7 @@
       var out = await res.json();
       if (out.ok) {
         msg.textContent = 'Saved.'; msg.style.color = 'var(--green)';
-        document.getElementById('mDesc').value = '';
-        document.getElementById('mGross').value = '';
-        document.getElementById('mFees').value = '';
-        document.getElementById('mShip').value = '';
+        ['mDesc','mGross','mFees','mShip'].forEach(function (id) { document.getElementById(id).value = ''; });
         await loadData();
       } else {
         msg.textContent = 'Save failed — see console.'; msg.style.color = 'var(--red)';
