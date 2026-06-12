@@ -110,4 +110,982 @@
   .menu-btn svg { display: block; }
 
   .mobile-menu {
-    display: none; position: fixed; inse
+    display: none; position: fixed; inset: 68px 0 auto 0; z-index: 99;
+    background: rgba(9,9,11,.97); backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px var(--pad) 24px;
+  }
+  .mobile-menu.open { display: block; }
+  .mobile-menu a {
+    display: block; padding: 14px 4px; color: var(--t1); text-decoration: none;
+    font-family: var(--disp); font-size: 17px; font-weight: 600;
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    padding-top: clamp(130px, 18vh, 190px);
+    padding-bottom: clamp(50px, 8vh, 90px);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 56% 42% at 78% 18%, rgba(245,166,35,.09), transparent 65%),
+      radial-gradient(ellipse 40% 30% at 12% 90%, rgba(245,166,35,.04), transparent 60%);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(32px, 5vw, 72px); align-items: center; position: relative;
+  }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--amber);
+    margin-bottom: 26px;
+  }
+  .kicker::before {
+    content: ''; width: 22px; height: 1px; background: var(--amber);
+  }
+  .hero h1 {
+    font-family: var(--disp);
+    font-size: clamp(42px, 5.6vw, 76px);
+    font-weight: 700; line-height: 1.02; letter-spacing: -.035em;
+    margin-bottom: 22px;
+  }
+  .hero h1 .hl { color: var(--amber); }
+  .hero-sub {
+    font-size: clamp(16px, 1.6vw, 18px); color: var(--t2);
+    max-width: 480px; line-height: 1.7; margin-bottom: 38px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--disp); font-size: 15px; font-weight: 600;
+    padding: 14px 28px; border-radius: 9px; cursor: pointer;
+    text-decoration: none; border: none; letter-spacing: -.01em;
+    transition: transform .15s, background .15s, border-color .15s, box-shadow .2s;
+  }
+  .btn-amber { background: var(--amber); color: #000; }
+  .btn-amber:hover { background: var(--amber-hi); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(245,166,35,.28); }
+  .btn-ghost { background: transparent; color: var(--t1); border: 1px solid var(--line-2); }
+  .btn-ghost:hover { border-color: var(--t3); background: var(--raise); }
+
+  .hero-proof {
+    display: flex; gap: 28px; margin-top: 44px; flex-wrap: wrap;
+  }
+  .proof { font-family: var(--mono); }
+  .proof b { display: block; font-size: 19px; font-weight: 700; color: var(--t1); letter-spacing: -.02em; }
+  .proof span { font-size: 11px; color: var(--t3); letter-spacing: .08em; text-transform: uppercase; }
+
+  /* ---- Signature: the slab ---- */
+  .slab-stage { position: relative; display: flex; justify-content: center; perspective: 1100px; }
+  .slab {
+    position: relative; width: min(310px, 78vw); aspect-ratio: 5 / 7.6;
+    border-radius: 14px;
+    background: linear-gradient(158deg, #1B1B21 0%, #121216 55%, #17171C 100%);
+    border: 1px solid var(--line-2);
+    box-shadow:
+      0 50px 90px rgba(0,0,0,.62),
+      inset 0 1px 0 rgba(255,255,255,.07),
+      inset 0 0 0 1px rgba(255,255,255,.02);
+    transform: rotateY(-9deg) rotateX(3deg) rotateZ(1.6deg);
+    animation: slab-float 7s ease-in-out infinite;
+  }
+  @keyframes slab-float {
+    0%, 100% { transform: rotateY(-9deg) rotateX(3deg) rotateZ(1.6deg) translateY(0); }
+    50%      { transform: rotateY(-9deg) rotateX(3deg) rotateZ(1.6deg) translateY(-14px); }
+  }
+  .slab::after {
+    content: ''; position: absolute; inset: 0; border-radius: 14px; pointer-events: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.05) 46%, rgba(255,255,255,.10) 50%, rgba(255,255,255,.05) 54%, transparent 62%);
+  }
+  .slab-label {
+    margin: 12px; padding: 11px 13px; border-radius: 8px;
+    background: linear-gradient(180deg, #232329, #1A1A1F);
+    border: 1px solid var(--line-2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .slab-label .who { font-family: var(--disp); font-weight: 700; font-size: 13.5px; letter-spacing: -.01em; }
+  .slab-label .what { font-family: var(--mono); font-size: 9px; color: var(--t3); letter-spacing: .06em; margin-top: 2px; }
+  .grade {
+    width: 44px; height: 44px; border-radius: 7px; flex-shrink: 0;
+    background: var(--amber);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #000; font-family: var(--mono); font-weight: 700;
+  }
+  .grade b { font-size: 17px; line-height: 1; }
+  .grade span { font-size: 6.5px; letter-spacing: .1em; }
+  .slab-art {
+    margin: 4px 26px; aspect-ratio: 3 / 4.05; border-radius: 6px;
+    background:
+      radial-gradient(ellipse 70% 48% at 50% 30%, rgba(245,166,35,.32), transparent 70%),
+      linear-gradient(196deg, #2A2A33 0%, #1A1A20 60%, #20202A 100%);
+    border: 1px solid var(--line-2);
+    position: relative; overflow: hidden;
+  }
+  .slab-art::before {
+    content: ''; position: absolute; left: 50%; bottom: -4%;
+    width: 58%; aspect-ratio: 1/1.5; transform: translateX(-50%);
+    background: radial-gradient(ellipse 50% 38% at 50% 22%, #0E0E12 99%, transparent),
+                linear-gradient(180deg, transparent 18%, #0E0E12 19%);
+    border-radius: 50% 50% 0 0 / 26% 26% 0 0;
+  }
+  .slab-art::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(245,166,35,.12) 47%, rgba(255,255,255,.07) 50%, rgba(245,166,35,.12) 53%, transparent 70%);
+    animation: foil 5.5s ease-in-out infinite;
+  }
+  @keyframes foil { 0%,100% { transform: translateX(-46%);} 50% { transform: translateX(46%);} }
+  .slab-cert {
+    position: absolute; bottom: 12px; left: 12px; right: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 9.5px; color: var(--t3); letter-spacing: .07em;
+  }
+  .pnl-chip {
+    position: absolute; right: -8%; top: 16%;
+    background: rgba(16,16,19,.92); border: 1px solid var(--amber-edge);
+    border-radius: 10px; padding: 11px 15px;
+    font-family: var(--mono); backdrop-filter: blur(8px);
+    box-shadow: 0 18px 44px rgba(0,0,0,.5), 0 0 0 4px rgba(245,166,35,.05);
+    animation: chip-float 7s ease-in-out infinite .8s;
+  }
+  @keyframes chip-float {
+    0%,100% { transform: translateY(0);} 50% { transform: translateY(-9px);}
+  }
+  .pnl-chip .lbl { font-size: 9px; color: var(--t3); letter-spacing: .12em; text-transform: uppercase; }
+  .pnl-chip .val { font-size: 19px; font-weight: 700; color: var(--green); letter-spacing: -.02em; }
+  .pnl-chip .sub { font-size: 10px; color: var(--t3); }
+  .pair-chip {
+    position: absolute; left: -10%; bottom: 13%;
+    background: rgba(16,16,19,.92); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 10px 14px;
+    font-family: var(--mono); font-size: 10px; color: var(--t2);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 18px 44px rgba(0,0,0,.5);
+    animation: chip-float 7s ease-in-out infinite 1.7s;
+  }
+  .pair-chip b { color: var(--amber); font-weight: 600; }
+
+  /* ============ TICKER ============ */
+  .tape {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: var(--raise); overflow: hidden; position: relative;
+  }
+  .tape-head {
+    position: absolute; left: 0; top: 0; bottom: 0; z-index: 3;
+    display: flex; align-items: center; padding: 0 18px;
+    background: var(--raise); border-right: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: .14em; color: var(--amber); white-space: nowrap;
+  }
+  .tape::after {
+    content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 90px; z-index: 2;
+    background: linear-gradient(to left, var(--raise), transparent);
+  }
+  .tape-track { display: flex; width: max-content; animation: tape-run 36s linear infinite; padding: 13px 0 13px 160px; }
+  @media (hover: hover) { .tape:hover .tape-track { animation-play-state: paused; } }
+  @keyframes tape-run { to { transform: translateX(-50%); } }
+  .tk {
+    display: flex; align-items: baseline; gap: 11px; padding: 0 30px;
+    border-right: 1px solid var(--line); white-space: nowrap; font-family: var(--mono);
+  }
+  .tk .c { font-size: 12px; font-weight: 500; color: var(--t1); }
+  .tk .p { font-size: 10px; color: var(--t3); }
+  .tk .g { font-size: 12.5px; font-weight: 700; }
+  .gain { color: var(--green); } .loss { color: var(--red); }
+
+  /* ============ SECTION SCAFFOLD ============ */
+  section { padding: clamp(72px, 11vh, 130px) 0; }
+  .sec-head { max-width: 620px; margin-bottom: clamp(40px, 6vh, 64px); }
+  .sec-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: .15em; text-transform: uppercase; color: var(--amber);
+    margin-bottom: 16px; display: block;
+  }
+  h2 {
+    font-family: var(--disp); font-size: clamp(30px, 3.6vw, 48px);
+    font-weight: 700; letter-spacing: -.03em; line-height: 1.08; margin-bottom: 16px;
+  }
+  .sec-sub { color: var(--t2); font-size: 16.5px; line-height: 1.7; }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+  /* ============ PLATFORMS ============ */
+  .plat-strip { border-bottom: 1px solid var(--line); padding: 30px 0; }
+  .plat-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .plat-row .lab { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--t3); text-transform: uppercase; }
+  .plats { display: flex; gap: 30px; flex-wrap: wrap; align-items: center; }
+  .plat { font-family: var(--disp); font-size: 15px; font-weight: 600; color: var(--t3); display: inline-flex; align-items: center; gap: 8px; letter-spacing: -.01em; }
+  .plat .st { font-family: var(--mono); font-size: 8.5px; padding: 2.5px 7px; border-radius: 4px; letter-spacing: .08em; }
+  .st.live { background: rgba(47,213,113,.1); color: var(--green); border: 1px solid rgba(47,213,113,.25); }
+  .st.soon { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-edge); }
+
+  /* ============ PAIRING (THE MOAT) ============ */
+  .pairing { border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--raise) 0%, var(--ink) 100%); }
+  .pair-flow {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch;
+    gap: clamp(16px, 3vw, 36px); max-width: 980px; margin: 0 auto;
+  }
+  .pair-card {
+    background: var(--raise-2); border: 1px solid var(--line-2); border-radius: 14px;
+    padding: 26px; position: relative;
+  }
+  .pair-card .tag {
+    font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; padding: 4px 9px; border-radius: 5px; display: inline-block; margin-bottom: 18px;
+  }
+  .tag.buy  { background: rgba(244,86,78,.1); color: var(--red); border: 1px solid rgba(244,86,78,.3); }
+  .tag.sell { background: rgba(47,213,113,.1); color: var(--green); border: 1px solid rgba(47,213,113,.3); }
+  .pair-card h3 { font-family: var(--disp); font-size: 17px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 4px; }
+  .pair-card .meta { font-family: var(--mono); font-size: 11px; color: var(--t3); margin-bottom: 18px; }
+  .pair-card dl { display: grid; gap: 9px; }
+  .pair-card .kv { display: flex; justify-content: space-between; font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 9px; }
+  .pair-card dt { color: var(--t3); }
+  .pair-card dd { font-family: var(--mono); font-weight: 600; }
+  .pair-link {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+  }
+  .pair-id {
+    font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--amber);
+    border: 1px solid var(--amber-edge); background: var(--amber-soft);
+    padding: 9px 14px; border-radius: 8px; white-space: nowrap;
+    box-shadow: 0 0 24px rgba(245,166,35,.12);
+  }
+  .pair-wire { width: 1px; flex: 1; min-height: 26px; background: linear-gradient(180deg, transparent, var(--amber-edge), transparent); }
+  .pair-result {
+    max-width: 980px; margin: 22px auto 0;
+    background: var(--raise-2); border: 1px solid var(--amber-edge); border-radius: 14px;
+    padding: 20px 26px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .pair-result .lab { font-family: var(--mono); font-size: 10px; letter-spacing: .13em; color: var(--t3); text-transform: uppercase; }
+  .pair-result .num { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--green); letter-spacing: -.02em; }
+  .pair-result .note { font-size: 12.5px; color: var(--t2); max-width: 420px; }
+
+  /* ============ DASHBOARD ============ */
+  .dash-frame {
+    background: var(--raise); border: 1px solid var(--line-2); border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 44px 100px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .dash-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px; background: var(--raise-2); border-bottom: 1px solid var(--line);
+  }
+  .dash-bar .crumbs { font-family: var(--mono); font-size: 11.5px; color: var(--t3); }
+  .dash-bar .crumbs b { color: var(--t1); font-weight: 600; }
+  .dash-bar .sync { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10.5px; color: var(--green); }
+  .sync .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2.2s infinite; }
+  @keyframes pulse { 0%,100% {opacity:1; box-shadow: 0 0 0 0 rgba(47,213,113,.4);} 50% {opacity:.6; box-shadow: 0 0 0 5px rgba(47,213,113,0);} }
+
+  .dash-body { display: grid; grid-template-columns: 215px 1fr; }
+  .dash-side { background: var(--raise-2); border-right: 1px solid var(--line); padding: 18px 0; }
+  .side-item {
+    display: flex; align-items: center; gap: 11px; padding: 10px 22px;
+    font-size: 13px; font-weight: 500; color: var(--t2); border-left: 2px solid transparent;
+  }
+  .side-item.on { color: var(--amber); border-left-color: var(--amber); background: var(--amber-soft); }
+  .side-item .n {
+    margin-left: auto; background: var(--amber); color: #000;
+    font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+    padding: 1px 7px; border-radius: 99px;
+  }
+  .side-lab { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--t3); padding: 18px 22px 8px; }
+  .side-plat { display: flex; justify-content: space-between; align-items: center; padding: 7px 22px; font-size: 12px; color: var(--t2); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .dot.g { background: var(--green); } .dot.a { background: var(--amber); }
+
+  .dash-main { padding: 26px; }
+  .dash-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 22px; gap: 14px; flex-wrap: wrap; }
+  .dash-top h3 { font-family: var(--disp); font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+  .dash-top .sub { font-family: var(--mono); font-size: 10.5px; color: var(--t3); letter-spacing: .08em; margin-bottom: 3px; }
+  .ranges { display: flex; gap: 7px; }
+  .rng {
+    font-family: var(--mono); font-size: 11px; padding: 5px 11px; border-radius: 6px;
+    border: 1px solid var(--line-2); background: transparent; color: var(--t2); cursor: pointer;
+  }
+  .rng.on { background: var(--amber); border-color: var(--amber); color: #000; font-weight: 700; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px; margin-bottom: 20px; }
+  .stat {
+    background: var(--raise-2); border: 1px solid var(--line); border-radius: 11px; padding: 15px 16px;
+  }
+  .stat .l { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--t3); margin-bottom: 8px; }
+  .stat .v { font-family: var(--mono); font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1; margin-bottom: 6px; }
+  .stat .d { font-family: var(--mono); font-size: 10.5px; color: var(--t3); }
+  .stat .d.up { color: var(--green); }
+  .stat .d.warn { color: var(--amber); }
+
+  .tbl { background: var(--raise-2); border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
+  .tr { display: grid; grid-template-columns: 2.1fr .9fr .9fr .9fr .9fr; padding: 12px 16px; border-bottom: 1px solid var(--line); align-items: center; }
+  .tr:last-child { border-bottom: none; }
+  .tr.head { padding: 9px 16px; }
+  .tr.head > div { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--t3); }
+  .tr > div:not(:first-child) { text-align: right; font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+  .cn b { display: block; font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
+  .cn span { font-family: var(--mono); font-size: 10px; color: var(--t3); }
+  .pf { font-family: var(--mono); font-size: 9px; background: var(--line); color: var(--t2); padding: 2.5px 7px; border-radius: 4px; letter-spacing: .06em; }
+  .dim { color: var(--t3); }
+
+  /* ============ STEPS ============ */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .step {
+    background: var(--raise); border: 1px solid var(--line); border-radius: 14px;
+    padding: 34px 30px; position: relative; transition: border-color .2s, transform .2s;
+  }
+  .step:hover { border-color: var(--amber-edge); transform: translateY(-3px); }
+  .step .ix {
+    font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--amber);
+    letter-spacing: .12em; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+  }
+  .step .ix::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
+  .step h3 { font-family: var(--disp); font-size: 19px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 10px; }
+  .step p { font-size: 14px; color: var(--t2); line-height: 1.7; }
+
+  /* ============ TAX ============ */
+  .tax { border-top: 1px solid var(--line); }
+  .tax-grid {
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: clamp(36px, 5vw, 76px); align-items: center;
+  }
+  .tax-feats { display: grid; gap: 22px; margin-top: 38px; }
+  .feat { display: flex; gap: 16px; }
+  .feat .ic {
+    width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+    background: var(--amber-soft); border: 1px solid var(--amber-edge);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feat .ic svg { width: 17px; height: 17px; stroke: var(--amber); }
+  .feat h4 { font-family: var(--disp); font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 4px; }
+  .feat p { font-size: 13.5px; color: var(--t2); line-height: 1.65; }
+
+  .stmt {
+    background: var(--raise); border: 1px solid var(--line-2); border-radius: 16px;
+    padding: 28px; box-shadow: 0 30px 70px rgba(0,0,0,.45);
+  }
+  .stmt-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .stmt-top h3 { font-family: var(--disp); font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
+  .stmt-top .yr { font-family: var(--mono); font-size: 10px; color: var(--t3); letter-spacing: .1em; }
+  .stmt-export {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
+    background: var(--amber); color: #000; border: none; border-radius: 6px;
+    padding: 7px 13px; cursor: pointer;
+  }
+  .srow { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .srow:last-of-type { border-bottom: none; }
+  .srow .k { color: var(--t2); }
+  .srow .v { font-family: var(--mono); font-weight: 600; }
+  .stot {
+    margin-top: 14px; padding-top: 16px; border-top: 2px solid var(--line-2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stot .k { font-family: var(--disp); font-weight: 700; font-size: 14.5px; }
+  .stot .v { font-family: var(--mono); font-weight: 700; font-size: 22px; color: var(--green); letter-spacing: -.02em; }
+
+  /* ============ PRICING ============ */
+  .pricing { border-top: 1px solid var(--line); }
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; align-items: start; }
+  .tier {
+    background: var(--raise); border: 1px solid var(--line); border-radius: 16px;
+    padding: 34px; position: relative; transition: border-color .2s;
+  }
+  .tier:hover { border-color: var(--line-2); }
+  .tier.hot { border-color: var(--amber); background: var(--raise-2); }
+  .tier.hot::before {
+    content: 'Most popular'; position: absolute; top: -11px; left: 30px;
+    background: var(--amber); color: #000; font-family: var(--mono);
+    font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 99px;
+  }
+  .tier .nm { font-family: var(--mono); font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--t2); margin-bottom: 14px; }
+  .tier .pr { font-family: var(--disp); font-size: 42px; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+  .tier .pr small { font-size: 16px; font-weight: 500; color: var(--t2); letter-spacing: -.01em; }
+  .tier .per { font-size: 12.5px; color: var(--t3); margin: 5px 0 24px; }
+  .tier ul { list-style: none; display: grid; gap: 9px; padding: 22px 0; border-top: 1px solid var(--line); margin-bottom: 26px; }
+  .tier li { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; color: var(--t2); }
+  .tier li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 11.5px; }
+  .tier li.no { color: var(--t3); }
+  .tier li.no::before { content: '—'; color: var(--t3); }
+  .tier .btn { width: 100%; }
+
+  /* ============ FAQ ============ */
+  .faq { border-top: 1px solid var(--line); }
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item summary {
+    list-style: none; cursor: pointer; padding: 22px 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 18px;
+    font-family: var(--disp); font-size: 16.5px; font-weight: 600; letter-spacing: -.01em;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+'; font-family: var(--mono); font-size: 18px; color: var(--amber);
+    transition: transform .2s; flex-shrink: 0;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item .a { padding: 0 0 22px; color: var(--t2); font-size: 14.5px; line-height: 1.7; max-width: 640px; }
+
+  /* ============ CTA ============ */
+  .cta { text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+  .cta::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 70% at 50% 100%, rgba(245,166,35,.1), transparent 70%);
+  }
+  .cta h2 { max-width: 660px; margin: 0 auto 18px; }
+  .cta p { color: var(--t2); max-width: 440px; margin: 0 auto 40px; font-size: 16.5px; }
+
+  /* ============ FOOTER ============ */
+  footer { border-top: 1px solid var(--line); padding: 44px 0; }
+  .foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; flex-wrap: wrap; }
+  .foot .fl { font-family: var(--disp); font-size: 17px; font-weight: 700; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
+  .foot .fl::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+  .foot .legal { font-family: var(--mono); font-size: 11px; color: var(--t3); }
+  .foot .disc { font-size: 11.5px; color: var(--t3); max-width: 380px; line-height: 1.65; }
+
+  /* ============ MODAL ============ */
+  .overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,.86); backdrop-filter: blur(10px);
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    background: var(--raise); border: 1px solid var(--line-2); border-radius: 18px;
+    padding: 38px; width: 100%; max-width: 470px; position: relative;
+    box-shadow: 0 40px 90px rgba(0,0,0,.6);
+  }
+  .modal-x {
+    position: absolute; top: 14px; right: 14px; width: 32px; height: 32px;
+    border-radius: 50%; background: var(--line); border: none; color: var(--t2);
+    font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .modal-x:hover { background: var(--line-2); }
+  .modal h3 { font-family: var(--disp); font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--t2); line-height: 1.65; margin-bottom: 26px; }
+  .ebay-btn {
+    width: 100%; background: #0064D2; color: #fff; border: none;
+    padding: 14px 22px; border-radius: 10px; cursor: pointer;
+    font-family: var(--disp); font-size: 15px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: background .15s;
+  }
+  .ebay-btn:hover { background: #0057B8; }
+  .modal .fine {
+    margin-top: 15px; text-align: center;
+    font-family: var(--mono); font-size: 11px; color: var(--t3); line-height: 1.7;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 56px; }
+    .slab-stage { order: -1; }
+    .pnl-chip { right: 2%; }
+    .pair-chip { left: 2%; }
+    .dash-body { grid-template-columns: 1fr; }
+    .dash-side { display: none; }
+    .steps { grid-template-columns: 1fr; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .tiers { grid-template-columns: 1fr; max-width: 430px; margin: 0 auto; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .pair-flow { grid-template-columns: 1fr; }
+    .pair-link { flex-direction: row; }
+    .pair-wire { height: 1px; width: auto; flex: 1; min-height: 0; background: linear-gradient(90deg, transparent, var(--amber-edge), transparent); }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .menu-btn { display: block; }
+    .tr { grid-template-columns: 2fr 1fr 1fr; }
+    .tr > div:nth-child(3), .tr > div:nth-child(4) { display: none; }
+    .tape-head { position: static; border-right: none; padding: 10px 18px 0; }
+    .tape-track { padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="logo" href="#">Ripster</a>
+    <nav aria-label="Primary">
+      <ul class="nav-links">
+        <li><a href="#pairing">Card ID</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#tax">Tax tools</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a class="nav-cta" href="#" data-open-modal>Connect eBay</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false" id="menuBtn">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M0 1h20M0 7h20M0 13h20"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#pairing">Card ID</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#tax">Tax tools</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#" data-open-modal>Connect eBay →</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="kicker">Private beta — eBay sync live</span>
+      <h1>Know exactly<br>what you've <span class="hl">made.</span></h1>
+      <p class="hero-sub">Every card you've bought and sold — across eBay, PayPal, and your inbox — paired into one real P&L. With the tax output your CPA actually wants.</p>
+      <div class="hero-actions">
+        <a class="btn btn-amber" href="#" data-open-modal>Connect eBay — free</a>
+        <a class="btn btn-ghost" href="#pairing">See how pairing works</a>
+      </div>
+      <div class="hero-proof" aria-label="Key numbers">
+        <div class="proof"><b>60 sec</b><span>To connect</span></div>
+        <div class="proof"><b>Read-only</b><span>API access</span></div>
+        <div class="proof"><b>8949-ready</b><span>Tax export</span></div>
+      </div>
+    </div>
+
+    <div class="slab-stage" aria-hidden="true">
+      <div class="slab">
+        <div class="slab-label">
+          <div>
+            <div class="who">S. OHTANI · ROOKIE</div>
+            <div class="what">2023 TOPPS CHROME #200</div>
+          </div>
+          <div class="grade"><b>10</b><span>GEM MT</span></div>
+        </div>
+        <div class="slab-art"></div>
+        <div class="slab-cert"><span>CERT 84512096</span><span>RIP-0042</span></div>
+      </div>
+      <div class="pnl-chip">
+        <div class="lbl">Net realized</div>
+        <div class="val">+$184.50</div>
+        <div class="sub">after fees & basis</div>
+      </div>
+      <div class="pair-chip">PAIRED <b>BUY ↔ SELL</b> · 2 platforms</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="tape" aria-label="Recent net results">
+  <div class="tape-head">PRICES REALIZED</div>
+  <div class="tape-track" id="tape">
+    <div class="tk"><span class="c">LeBron James RC BGS 9.5</span><span class="p">eBay</span><span class="g gain">+$2,840</span></div>
+    <div class="tk"><span class="c">Charizard 1st Ed. PSA 9</span><span class="p">eBay</span><span class="g gain">+$1,120</span></div>
+    <div class="tk"><span class="c">Ohtani RC PSA 10</span><span class="p">eBay</span><span class="g gain">+$184</span></div>
+    <div class="tk"><span class="c">Herbert RC PSA 10</span><span class="p">eBay</span><span class="g loss">−$42</span></div>
+    <div class="tk"><span class="c">Luka Silver Prizm PSA 10</span><span class="p">eBay</span><span class="g gain">+$3,200</span></div>
+    <div class="tk"><span class="c">Tatis Jr. SSP Raw</span><span class="p">PayPal</span><span class="g gain">+$312</span></div>
+    <div class="tk"><span class="c">Mewtwo Base PSA 8</span><span class="p">PayPal</span><span class="g gain">+$88</span></div>
+    <div class="tk"><span class="c">Soto Auto /50</span><span class="p">eBay</span><span class="g loss">−$28</span></div>
+  </div>
+</div>
+
+<!-- ============ PLATFORMS ============ -->
+<div class="plat-strip">
+  <div class="wrap plat-row">
+    <span class="lab">Syncs with</span>
+    <div class="plats">
+      <span class="plat">eBay <span class="st live">LIVE</span></span>
+      <span class="plat">PayPal <span class="st soon">SOON</span></span>
+      <span class="plat">Fanatics Collect <span class="st soon">SOON</span></span>
+      <span class="plat">Goldin <span class="st soon">SOON</span></span>
+      <span class="plat">Venmo <span class="st soon">SOON</span></span>
+      <span class="plat">PSA <span class="st soon">SOON</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAIRING — THE MOAT ============ -->
+<section class="pairing" id="pairing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The Card ID system</span>
+      <h2>One card. Two transactions. Finally connected.</h2>
+      <p class="sec-sub">You bought raw on PayPal. You sold graded on eBay fourteen months later. No tool on the market connects those two events — so nobody knows their real return. Ripster assigns every card an ID and pairs the buy to the sell, automatically, across any platform combination.</p>
+    </div>
+
+    <div class="pair-flow reveal">
+      <div class="pair-card">
+        <span class="tag buy">Buy</span>
+        <h3>Tatis Jr. 2020 Topps Update SSP</h3>
+        <div class="meta">RAW · PAYPAL G&S · MAR 14, 2024</div>
+        <dl>
+          <div class="kv"><dt>Purchase price</dt><dd>$118.00</dd></div>
+          <div class="kv"><dt>Grading fee (PSA)</dt><dd>$24.99</dd></div>
+          <div class="kv"><dt>Shipping in</dt><dd>$4.65</dd></div>
+          <div class="kv"><dt>Total cost basis</dt><dd>$147.64</dd></div>
+        </dl>
+      </div>
+
+      <div class="pair-link" aria-hidden="true">
+        <div class="pair-wire"></div>
+        <span class="pair-id">RIP-0117</span>
+        <div class="pair-wire"></div>
+      </div>
+
+      <div class="pair-card">
+        <span class="tag sell">Sell</span>
+        <h3>Tatis Jr. SSP — now PSA 10</h3>
+        <div class="meta">GRADED · EBAY · MAY 30, 2025</div>
+        <dl>
+          <div class="kv"><dt>Sale price</dt><dd>$520.00</dd></div>
+          <div class="kv"><dt>eBay fees</dt><dd>−$67.60</dd></div>
+          <div class="kv"><dt>Shipping out</dt><dd>−$5.15</dd></div>
+          <div class="kv"><dt>Net proceeds</dt><dd>$447.25</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="pair-result reveal">
+      <div>
+        <div class="lab">True realized gain</div>
+        <div class="num">+$299.61</div>
+      </div>
+      <p class="note">Held 442 days — long-term. Grading fee added to basis automatically. Both legs exported to Form 8949 with dates, basis, and proceeds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="dashboard">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Your dashboard</span>
+      <h2>Every card. Every platform. One number.</h2>
+      <p class="sec-sub">Not what the platform reported — what you actually kept after fees, shipping, and cost basis.</p>
+    </div>
+
+    <div class="dash-frame reveal" role="img" aria-label="Preview of the Ripster portfolio dashboard">
+      <div class="dash-bar">
+        <span class="crumbs"><b>Ripster</b> / portfolio</span>
+        <span class="sync"><span class="pulse"></span>eBay synced 2 min ago</span>
+      </div>
+      <div class="dash-body">
+        <div class="dash-side">
+          <div class="side-item on">Dashboard</div>
+          <div class="side-item">Portfolio</div>
+          <div class="side-item">Transactions</div>
+          <div class="side-item">Tax center</div>
+          <div class="side-item">Grading</div>
+          <div class="side-item">Review queue <span class="n">3</span></div>
+          <div class="side-lab">Platforms</div>
+          <div class="side-plat"><span>eBay</span><span class="dot g"></span></div>
+          <div class="side-plat"><span>PayPal</span><span class="dot a"></span></div>
+          <div class="side-plat"><span>Fanatics</span><span class="dot a"></span></div>
+        </div>
+        <div class="dash-main">
+          <div class="dash-top">
+            <div>
+              <div class="sub">PORTFOLIO OVERVIEW</div>
+              <h3>Year to date</h3>
+            </div>
+            <div class="ranges" role="group" aria-label="Time range">
+              <button class="rng">1M</button>
+              <button class="rng">3M</button>
+              <button class="rng on">YTD</button>
+              <button class="rng">All</button>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><div class="l">Total invested</div><div class="v">$14,820</div><div class="d">312 cards tracked</div></div>
+            <div class="stat"><div class="l">Net realized</div><div class="v" style="color:var(--green)">+$6,284</div><div class="d up">↑ 42.4% ROI</div></div>
+            <div class="stat"><div class="l">Unrealized</div><div class="v">$9,140</div><div class="d up">+$1,820 est.</div></div>
+            <div class="stat"><div class="l">Tax exposure</div><div class="v" style="color:var(--amber)">$1,756</div><div class="d warn">4 cards near 1-yr</div></div>
+          </div>
+          <div class="tbl">
+            <div class="tr head"><div>Card</div><div>Platform</div><div>Basis</div><div>Net sold</div><div>Gain / loss</div></div>
+            <div class="tr">
+              <div class="cn"><b>LeBron James RC BGS 9.5</b><span>2003-04 Topps Chrome #111 · RIP-0009</span></div>
+              <div><span class="pf">EBAY</span></div><div class="dim">$1,200</div><div>$4,040</div><div class="gain">+$2,840</div>
+            </div>
+            <div class="tr">
+              <div class="cn"><b>Charizard 1st Ed. PSA 9</b><span>1999 Base Set #4 · RIP-0021</span></div>
+              <div><span class="pf">EBAY</span></div><div class="dim">$2,800</div><div>$3,920</div><div class="gain">+$1,120</div>
+            </div>
+            <div class="tr">
+              <div class="cn"><b>Ohtani RC PSA 10</b><span>2023 Topps Chrome #200 · RIP-0042</span></div>
+              <div><span class="pf">EBAY</span></div><div class="dim">$380</div><div>$564</div><div class="gain">+$184</div>
+            </div>
+            <div class="tr">
+              <div class="cn"><b>Herbert RC PSA 10</b><span>2021 Panini Prizm #338 · RIP-0036</span></div>
+              <div><span class="pf">EBAY</span></div><div class="dim">$320</div><div>$278</div><div class="loss">−$42</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEPS ============ -->
+<section style="padding-top: 0;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">How it works</span>
+      <h2>Three steps between you and your real number.</h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="ix">STEP 1</div>
+        <h3>Connect once</h3>
+        <p>Authorize Ripster through eBay's official OAuth — read-only, sixty seconds, no password shared. Your full transaction history syncs automatically and stays current.</p>
+      </div>
+      <div class="step">
+        <div class="ix">STEP 2</div>
+        <h3>Cards pair themselves</h3>
+        <p>Every purchase gets a Card ID. When the matching sale appears — any platform, any year — Ripster links the legs and computes true cost basis, fees included.</p>
+      </div>
+      <div class="step">
+        <div class="ix">STEP 3</div>
+        <h3>Export to your CPA</h3>
+        <p>Schedule D and Form 8949 output with dates, basis, proceeds, and holding periods per card. The 1099-K gap, documented and defensible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAX ============ -->
+<section class="tax" id="tax">
+  <div class="wrap tax-grid">
+    <div class="reveal">
+      <span class="eyebrow">Tax tools</span>
+      <h2>The 28% collectibles rate is real. So is your exposure.</h2>
+      <p class="sec-sub">Cards aren't taxed like stocks. Ripster is the only tracker built for that difference.</p>
+      <div class="tax-feats">
+        <div class="feat">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 12h6M9 16h6M9 8h2M5 3h14a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z"/></svg></div>
+          <div>
+            <h4>Schedule D / Form 8949 export</h4>
+            <p>One click. Proceeds, basis, acquisition and sale dates, short/long-term classification — formatted the way your CPA files it.</p>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+          <div>
+            <h4>1099-K reconciliation</h4>
+            <p>The 1099-K shows gross sales. Your taxable gain is much smaller. Ripster documents the difference — fees, shipping, cost of goods — line by line.</p>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div>
+            <h4>Holding-period alerts</h4>
+            <p>Get notified when a card approaches the one-year long-term threshold — often worth 9+ points of federal tax on the gain.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stmt reveal" role="img" aria-label="Example annual tax summary">
+      <div class="stmt-top">
+        <div>
+          <h3>Tax summary</h3>
+          <span class="yr">TAX YEAR 2024 · ALL PLATFORMS</span>
+        </div>
+        <button class="stmt-export" type="button">EXPORT CSV</button>
+      </div>
+      <div class="srow"><span class="k">Gross sales (1099-K)</span><span class="v">$28,400.00</span></div>
+      <div class="srow"><span class="k">Platform fees & shipping</span><span class="v" style="color:var(--red)">−$3,192.00</span></div>
+      <div class="srow"><span class="k">Cost basis</span><span class="v" style="color:var(--red)">−$18,924.00</span></div>
+      <div class="srow"><span class="k">Grading fees applied to basis</span><span class="v" style="color:var(--red)">−$840.00</span></div>
+      <div class="srow"><span class="k">Short-term gains</span><span class="v gain">$3,820.00</span></div>
+      <div class="srow"><span class="k">Long-term gains (28% cap)</span><span class="v gain">$1,624.00</span></div>
+      <div class="stot"><span class="k">Net taxable gain</span><span class="v">$5,444.00</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Pricing</span>
+      <h2>Start free. Upgrade when the numbers matter.</h2>
+    </div>
+    <div class="tiers reveal">
+      <div class="tier">
+        <div class="nm">Collector</div>
+        <div class="pr">$0</div>
+        <div class="per">free forever</div>
+        <ul>
+          <li>eBay sync — 500 transactions</li>
+          <li>Card ID pairing</li>
+          <li>Portfolio dashboard</li>
+          <li>Per-card ROI</li>
+          <li class="no">Tax exports</li>
+          <li class="no">Holding-period alerts</li>
+        </ul>
+        <a class="btn btn-ghost" href="#" data-open-modal>Start free</a>
+      </div>
+      <div class="tier hot">
+        <div class="nm">Reseller</div>
+        <div class="pr">$19<small>/mo</small></div>
+        <div class="per">14-day free trial</div>
+        <ul>
+          <li>Everything in Collector</li>
+          <li>Unlimited transactions</li>
+          <li>Schedule D / 8949 export</li>
+          <li>1099-K reconciliation</li>
+          <li>Holding-period alerts</li>
+          <li>Hobby vs. dealer tracking</li>
+        </ul>
+        <a class="btn btn-amber" href="#" data-open-modal>Start 14-day trial</a>
+      </div>
+      <div class="tier">
+        <div class="nm">Coming soon</div>
+        <div class="pr">$—</div>
+        <div class="per">multi-platform sync</div>
+        <ul>
+          <li>Everything in Reseller</li>
+          <li>PayPal + Venmo sync</li>
+          <li>Fanatics Collect & Goldin</li>
+          <li>PSA grading integration</li>
+          <li>Box-break cost allocator</li>
+          <li>CPA export package</li>
+        </ul>
+        <a class="btn btn-ghost" href="#" aria-disabled="true" style="opacity:.5; pointer-events:none;">Join waitlist</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Asked by every reseller we talk to.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item">
+        <summary>Can Ripster see my eBay password or change my listings?</summary>
+        <p class="a">No. The connection runs through eBay's official OAuth — you sign in on eBay's own page and grant read-only access to transaction history. Ripster never sees your password and can't touch listings, bids, or account settings.</p>
+      </details>
+      <details class="faq-item">
+        <summary>I bought raw and sold graded a year later. Does pairing still work?</summary>
+        <p class="a">That's exactly the case the Card ID system was built for. The buy leg and sell leg can be on different platforms, years apart, raw versus slabbed — Ripster links them and carries grading fees into the cost basis.</p>
+      </details>
+      <details class="faq-item">
+        <summary>My 1099-K shows way more than I actually made. Does Ripster fix that?</summary>
+        <p class="a">The 1099-K reports gross sales, not profit. Ripster documents the gap — fees, shipping, and cost basis — and produces the per-transaction record that supports the real number on your return.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is Ripster a tax advisor?</summary>
+        <p class="a">No. Ripster organizes your transaction data and produces exports for you and your CPA. It doesn't give tax advice — bring the output to a qualified professional when you file.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What about my non-card sales on the same accounts?</summary>
+        <p class="a">Ripster filters obvious non-card transactions automatically and routes anything ambiguous to a review queue, so your P&L reflects cards — not the lawnmower you sold in July.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta">
+  <div class="wrap">
+    <h2 class="reveal">Stop guessing. Start <span style="color:var(--amber)">knowing.</span></h2>
+    <p class="reveal">Connect your eBay account in sixty seconds and see your real P&L for the first time.</p>
+    <a class="btn btn-amber reveal" style="font-size:16.5px; padding:16px 38px;" href="#" data-open-modal>Connect eBay — free</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <span class="fl">Ripster</span>
+      <div class="legal" style="margin-top:10px;">© 2025 Ripster · All rights reserved</div>
+    </div>
+    <p class="disc">Ripster is a data organization tool, not a tax, legal, or investment advisor. Figures shown are illustrative. Consult a qualified CPA before filing.</p>
+  </div>
+</footer>
+
+<!-- ============ EBAY MODAL ============ -->
+<div class="overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button class="modal-x" aria-label="Close" data-close-modal>×</button>
+    <h3 id="modalTitle">Connect your eBay</h3>
+    <p id="modalBody">You'll be taken to eBay's secure sign-in page. Ripster requests read-only access to your transaction history — never your listings, bids, or settings.</p>
+    <button class="ebay-btn" id="oauthBtn" type="button">Continue with eBay</button>
+    <p class="fine">Read-only access · No card required · Cancel anytime<br>Your credentials go to eBay directly — Ripster never sees your password.</p>
+  </div>
+</div>
+
+<script>
+  // ----- Nav scroll state -----
+  var hdr = document.getElementById('hdr');
+  var onScroll = function () { hdr.classList.toggle('scrolled', window.scrollY > 12); };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ----- Mobile menu -----
+  var menuBtn = document.getElementById('menuBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', function () {
+    var open = mobileMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      mobileMenu.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // ----- Ticker: duplicate content for seamless loop -----
+  var tape = document.getElementById('tape');
+  tape.innerHTML += tape.innerHTML;
+
+  // ----- Scroll reveals -----
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  // ----- Modal -----
+  var modal = document.getElementById('modal');
+  function openModal(e) { if (e) e.preventDefault(); modal.classList.add('open'); }
+  function closeModal() { modal.classList.remove('open'); }
+  document.querySelectorAll('[data-open-modal]').forEach(function (el) { el.addEventListener('click', openModal); });
+  document.querySelectorAll('[data-close-modal]').forEach(function (el) { el.addEventListener('click', closeModal); });
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+  // ----- eBay OAuth (SANDBOX) -----
+  var EBAY_APP_ID = 'DerekPon-Ripster-SBX-aa925d38d-b6fcf3d0';
+  var REDIRECT_URI = 'Derek_Pon-DerekPon-Ripste-niguszn';
+  document.getElementById('oauthBtn').addEventListener('click', function () {
+    var scope = [
+      'https://api.ebay.com/oauth/api_scope',
+      'https://api.ebay.com/oauth/api_scope/sell.finances',
+      'https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly',
+      'https://api.ebay.com/oauth/api_scope/commerce.identity.readonly'
+    ].join('%20');
+    var state = Math.random().toString(36).slice(2);
+    sessionStorage.setItem('ebay_oauth_state', state);
+    window.location.href = 'https://auth.sandbox.ebay.com/oauth2/authorize'
+      + '?client_id=' + EBAY_APP_ID
+      + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI)
+      + '&response_type=code&scope=' + scope
+      + '&state=' + state;
+  });
+</script>
+</body>
+</html>
