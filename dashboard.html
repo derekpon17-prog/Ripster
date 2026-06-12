@@ -1,52 +1,327 @@
-// Adds a manual transaction (PayPal, Venmo, Fanatics, card shows, cash).
-// POST /api/manual?key=APP_SECRET  with JSON body.
-
-module.exports = async (req, res) => {
-  if (req.query.key !== process.env.APP_SECRET) {
-    return res.status(401).json({ error: 'unauthorized' });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ripster — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#09090B; --raise:#101013; --raise-2:#16161A;
+    --line:#1F1F25; --line-2:#2C2C34;
+    --amber:#F5A623; --amber-hi:#FFC04D;
+    --amber-soft:rgba(245,166,35,.10); --amber-edge:rgba(245,166,35,.28);
+    --green:#2FD571; --red:#F4564E;
+    --t1:#FAFAF8; --t2:#9C9CA8; --t3:#5D5D6B;
+    --disp:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
   }
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'method not allowed' });
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--t1);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--amber);color:#000}
+  a{color:var(--amber);text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+  header{border-bottom:1px solid var(--line);background:var(--raise)}
+  .top{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .logo{font-family:var(--disp);font-size:19px;font-weight:700;color:var(--t1);display:inline-flex;align-items:center;gap:8px}
+  .logo::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+  .logo small{font-family:var(--mono);font-size:10px;color:var(--t3);font-weight:400;letter-spacing:.1em;margin-left:4px}
+  .top-actions{display:flex;gap:10px;align-items:center}
+  .btn{font-family:var(--disp);font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:8px;cursor:pointer;border:none;letter-spacing:-.01em;transition:background .15s,border-color .15s}
+  .btn-amber{background:var(--amber);color:#000}
+  .btn-amber:hover{background:var(--amber-hi)}
+  .btn-ghost{background:transparent;color:var(--t1);border:1px solid var(--line-2)}
+  .btn-ghost:hover{border-color:var(--t3)}
+  .btn:disabled{opacity:.5;cursor:default}
+
+  main{padding:36px 0 80px}
+  .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+  .page-head .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--t3);text-transform:uppercase;margin-bottom:4px}
+  .page-head h1{font-family:var(--disp);font-size:26px;font-weight:700;letter-spacing:-.02em}
+  .sync-note{font-family:var(--mono);font-size:11px;color:var(--t3)}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+  .stat{background:var(--raise);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .stat .l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:9px}
+  .stat .v{font-family:var(--mono);font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1}
+  .stat .d{font-family:var(--mono);font-size:10.5px;color:var(--t3);margin-top:7px}
+
+  .panel{background:var(--raise);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .panel-head h2{font-family:var(--disp);font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .panel-head .hint{font-family:var(--mono);font-size:10.5px;color:var(--t3)}
+
+  table{width:100%;border-collapse:collapse}
+  th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);text-align:left;padding:10px 20px;border-bottom:1px solid var(--line)}
+  th.r,td.r{text-align:right}
+  td{padding:12px 20px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(255,255,255,.015)}
+  td .desc{font-weight:500;letter-spacing:-.01em}
+  td .meta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
+  .num{font-family:var(--mono);font-size:12.5px;font-weight:500}
+  .gain{color:var(--green)} .loss{color:var(--red)} .dim{color:var(--t3)}
+  .pill{font-family:var(--mono);font-size:9px;padding:2.5px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
+  .pill.sale{background:rgba(47,213,113,.1);color:var(--green);border:1px solid rgba(47,213,113,.25)}
+  .pill.purchase{background:rgba(244,86,78,.1);color:var(--red);border:1px solid rgba(244,86,78,.3)}
+  .pill.other{background:var(--line);color:var(--t2);border:1px solid var(--line-2)}
+  .pill.plat{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-edge)}
+
+  .empty{padding:48px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:12px}
+
+  /* Manual entry */
+  .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px}
+  .field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+  .field input,.field select{width:100%;background:var(--raise-2);border:1px solid var(--line-2);border-radius:8px;color:var(--t1);font-family:var(--body);font-size:13.5px;padding:10px 12px;outline:none}
+  .field input:focus,.field select:focus{border-color:var(--amber)}
+  .form-foot{display:flex;justify-content:flex-end;gap:10px;padding:0 20px 20px}
+  .form-msg{font-family:var(--mono);font-size:11px;align-self:center;margin-right:auto;padding-left:2px}
+
+  /* Key gate */
+  .gate{position:fixed;inset:0;background:var(--ink);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+  .gate-card{background:var(--raise);border:1px solid var(--line-2);border-radius:16px;padding:36px;max-width:400px;width:100%}
+  .gate-card h2{font-family:var(--disp);font-size:20px;font-weight:700;margin-bottom:8px;letter-spacing:-.02em}
+  .gate-card p{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.6}
+  .gate-card input{width:100%;background:var(--raise-2);border:1px solid var(--line-2);border-radius:8px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:12px 14px;outline:none;margin-bottom:14px}
+  .gate-card input:focus{border-color:var(--amber)}
+  .gate-card .btn{width:100%}
+  .gate-err{font-family:var(--mono);font-size:11px;color:var(--red);margin-bottom:10px;display:none}
+
+  @media (max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .form-grid{grid-template-columns:1fr}
+    th:nth-child(4),td:nth-child(4),th:nth-child(5),td:nth-child(5){display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <h2>Ripster dashboard</h2>
+    <p>Enter your app key to load your data. It stays in this browser session only.</p>
+    <div class="gate-err" id="gateErr">That key didn't work — check it and try again.</div>
+    <input type="password" id="gateKey" placeholder="App key" autocomplete="off">
+    <button class="btn btn-amber" id="gateGo">Unlock</button>
+  </div>
+</div>
+
+<header>
+  <div class="wrap top">
+    <a class="logo" href="/">Ripster <small>DASHBOARD</small></a>
+    <div class="top-actions">
+      <button class="btn btn-ghost" id="syncBtn">Sync eBay</button>
+      <a class="btn btn-amber" href="/" style="display:inline-flex;align-items:center">Site</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <div class="sub">PORTFOLIO · ALL PLATFORMS</div>
+        <h1>Your real numbers</h1>
+      </div>
+      <span class="sync-note" id="syncNote">—</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="l">Sales (90d)</div><div class="v" id="sCount">—</div><div class="d">completed transactions</div></div>
+      <div class="stat"><div class="l">Gross sales</div><div class="v" id="sGross">—</div><div class="d">before fees</div></div>
+      <div class="stat"><div class="l">Total fees</div><div class="v loss" id="sFees">—</div><div class="d">platform + processing</div></div>
+      <div class="stat"><div class="l">Net total</div><div class="v" id="sNet">—</div><div class="d">what you actually kept</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Add a transaction manually</h2>
+        <span class="hint">PayPal · Venmo · Fanatics · card shows · cash</span>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Type</label>
+          <select id="mType"><option value="purchase">Buy</option><option value="sale">Sell</option></select>
+        </div>
+        <div class="field"><label>Platform</label>
+          <select id="mPlat">
+            <option>paypal</option><option>venmo</option><option>fanatics</option>
+            <option>goldin</option><option>card show</option><option>cash</option><option>other</option>
+          </select>
+        </div>
+        <div class="field"><label>Date</label><input type="date" id="mDate"></div>
+        <div class="field" style="grid-column:1/-1"><label>Card / description</label>
+          <input type="text" id="mDesc" placeholder="e.g. 2020 Topps Update Tatis Jr. SSP — raw">
+        </div>
+        <div class="field"><label>Price ($)</label><input type="number" step="0.01" id="mGross" placeholder="0.00"></div>
+        <div class="field"><label>Fees ($)</label><input type="number" step="0.01" id="mFees" placeholder="0.00"></div>
+        <div class="field"><label>Shipping ($)</label><input type="number" step="0.01" id="mShip" placeholder="0.00"></div>
+      </div>
+      <div class="form-foot">
+        <span class="form-msg" id="mMsg"></span>
+        <button class="btn btn-amber" id="mSave">Save transaction</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Transactions</h2>
+        <span class="hint" id="txCount">—</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr><th>Description</th><th>Type</th><th>Platform</th><th class="r">Gross</th><th class="r">Fees</th><th class="r">Net</th></tr>
+          </thead>
+          <tbody id="txBody">
+            <tr><td colspan="6" class="empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  var KEY = sessionStorage.getItem('ripster_key') || '';
+
+  function fmt(n) {
+    var v = Number(n) || 0;
+    var s = Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return (v < 0 ? '−$' : '$') + s;
   }
 
-  const b = req.body || {};
-  const gross = Math.abs(parseFloat(b.gross) || 0);
-  const fees = Math.abs(parseFloat(b.fees) || 0);
-  const shipping = Math.abs(parseFloat(b.shipping) || 0);
-  const isSale = b.txn_type === 'sale';
+  function fmtDate(d) {
+    if (!d) return '';
+    var dt = new Date(d);
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
 
-  const row = {
-    platform: b.platform || 'manual',
-    platform_txn_id: 'manual-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
-    txn_type: isSale ? 'sale' : 'purchase',
-    txn_date: b.txn_date ? new Date(b.txn_date).toISOString() : new Date().toISOString(),
-    description: b.description || 'Manual entry',
-    gross_amount: isSale ? gross : -gross,
-    fees: fees,
-    shipping: shipping,
-    net_amount: isSale ? gross - fees - shipping : -(gross + fees + shipping),
-    raw: b,
-    is_card: true,
-    needs_review: false
-  };
+  function showGate(err) {
+    document.getElementById('gate').style.display = 'flex';
+    document.getElementById('gateErr').style.display = err ? 'block' : 'none';
+  }
+  function hideGate() {
+    document.getElementById('gate').style.display = 'none';
+  }
 
-  try {
-    const sbRes = await fetch(process.env.SUPABASE_URL + '/rest/v1/transactions', {
-      method: 'POST',
-      headers: {
-        'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY,
-        'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_ROLE_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(row)
-    });
-    if (!sbRes.ok) {
-      return res.status(500).json({ error: 'insert failed', detail: await sbRes.text() });
+  async function loadData() {
+    try {
+      var res = await fetch('/api/data?key=' + encodeURIComponent(KEY));
+      if (res.status === 401) { sessionStorage.removeItem('ripster_key'); showGate(true); return; }
+      var data = await res.json();
+      hideGate();
+
+      document.getElementById('sCount').textContent = data.summary.sales_count;
+      document.getElementById('sGross').textContent = fmt(data.summary.gross_sales);
+      document.getElementById('sFees').textContent = '−' + fmt(data.summary.total_fees).replace('$', '$');
+      var netEl = document.getElementById('sNet');
+      netEl.textContent = fmt(data.summary.net_total);
+      netEl.className = 'v ' + (data.summary.net_total >= 0 ? 'gain' : 'loss');
+
+      var rows = data.transactions || [];
+      document.getElementById('txCount').textContent = rows.length + ' rows · newest first';
+      document.getElementById('syncNote').textContent = 'Loaded ' + new Date().toLocaleTimeString();
+
+      var body = document.getElementById('txBody');
+      if (!rows.length) {
+        body.innerHTML = '<tr><td colspan="6" class="empty">No transactions yet. Hit Sync eBay or add one manually.</td></tr>';
+        return;
+      }
+      body.innerHTML = rows.map(function (t) {
+        var typeClass = t.txn_type === 'sale' ? 'sale' : (t.txn_type === 'purchase' ? 'purchase' : 'other');
+        var net = Number(t.net_amount) || 0;
+        return '<tr>'
+          + '<td><div class="desc">' + (t.description || '—').replace(/</g, '&lt;') + '</div>'
+          + '<div class="meta">' + fmtDate(t.txn_date) + '</div></td>'
+          + '<td><span class="pill ' + typeClass + '">' + (t.txn_type || '—') + '</span></td>'
+          + '<td><span class="pill plat">' + (t.platform || '—') + '</span></td>'
+          + '<td class="r num dim">' + fmt(t.gross_amount) + '</td>'
+          + '<td class="r num dim">' + (Number(t.fees) ? '−' + fmt(t.fees) : '—') + '</td>'
+          + '<td class="r num ' + (net >= 0 ? 'gain' : 'loss') + '">' + fmt(net) + '</td>'
+          + '</tr>';
+      }).join('');
+    } catch (e) {
+      document.getElementById('txBody').innerHTML =
+        '<tr><td colspan="6" class="empty">Could not load data — check your connection and refresh.</td></tr>';
     }
-    const saved = await sbRes.json();
-    return res.status(200).json({ ok: true, transaction: saved[0] });
-  } catch (err) {
-    return res.status(500).json({ error: 'crashed', detail: String(err) });
   }
-};
+
+  // ----- Gate -----
+  document.getElementById('gateGo').addEventListener('click', function () {
+    KEY = document.getElementById('gateKey').value.trim();
+    if (!KEY) return;
+    sessionStorage.setItem('ripster_key', KEY);
+    loadData();
+  });
+  document.getElementById('gateKey').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('gateGo').click();
+  });
+
+  // ----- Sync button -----
+  document.getElementById('syncBtn').addEventListener('click', async function () {
+    var btn = this;
+    btn.disabled = true; btn.textContent = 'Syncing…';
+    try {
+      var res = await fetch('/api/ebay/sync?key=' + encodeURIComponent(KEY));
+      var out = await res.json();
+      document.getElementById('syncNote').textContent = out.ok
+        ? 'Synced ' + out.pulled_from_ebay + ' eBay transactions'
+        : 'Sync error — see console';
+      if (!out.ok) console.error(out);
+      await loadData();
+    } catch (e) {
+      document.getElementById('syncNote').textContent = 'Sync failed — see console';
+      console.error(e);
+    }
+    btn.disabled = false; btn.textContent = 'Sync eBay';
+  });
+
+  // ----- Manual entry -----
+  document.getElementById('mSave').addEventListener('click', async function () {
+    var btn = this, msg = document.getElementById('mMsg');
+    var payload = {
+      txn_type: document.getElementById('mType').value,
+      platform: document.getElementById('mPlat').value,
+      txn_date: document.getElementById('mDate').value,
+      description: document.getElementById('mDesc').value.trim(),
+      gross: document.getElementById('mGross').value,
+      fees: document.getElementById('mFees').value,
+      shipping: document.getElementById('mShip').value
+    };
+    if (!payload.description || !payload.gross) {
+      msg.textContent = 'Description and price are required.'; msg.style.color = 'var(--red)';
+      return;
+    }
+    btn.disabled = true; msg.textContent = 'Saving…'; msg.style.color = 'var(--t3)';
+    try {
+      var res = await fetch('/api/manual?key=' + encodeURIComponent(KEY), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      var out = await res.json();
+      if (out.ok) {
+        msg.textContent = 'Saved.'; msg.style.color = 'var(--green)';
+        document.getElementById('mDesc').value = '';
+        document.getElementById('mGross').value = '';
+        document.getElementById('mFees').value = '';
+        document.getElementById('mShip').value = '';
+        await loadData();
+      } else {
+        msg.textContent = 'Save failed — see console.'; msg.style.color = 'var(--red)';
+        console.error(out);
+      }
+    } catch (e) {
+      msg.textContent = 'Save failed — see console.'; msg.style.color = 'var(--red)';
+      console.error(e);
+    }
+    btn.disabled = false;
+  });
+
+  // ----- Boot -----
+  if (KEY) { loadData(); } else { showGate(false); }
+</script>
+</body>
+</html>
