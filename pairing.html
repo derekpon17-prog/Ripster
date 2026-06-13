@@ -41,7 +41,6 @@
   .field input,.field select{width:100%;background:var(--raise-2);border:1px solid var(--line-2);border-radius:8px;color:var(--t1);font-family:var(--body);font-size:13.5px;padding:10px 12px;outline:none}
   .field input:focus,.field select:focus{border-color:var(--amber)}
 
-  /* Add a purchase (inline on pairing page) */
   .addbuy{background:var(--raise);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
   .addbuy .ah{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
   .addbuy .ah h2{font-family:var(--disp);font-size:15px;font-weight:700}
@@ -61,31 +60,60 @@
   .leg:last-child{border-bottom:none}
   .leg:hover{background:rgba(255,255,255,.02)}
   .leg.sel{background:var(--amber-soft);box-shadow:inset 3px 0 0 var(--amber)}
-  .leg .thumb{width:38px;height:52px;border-radius:5px;object-fit:cover;border:1px solid var(--line-2);background:var(--raise-2);flex-shrink:0}
-  .leg .thumb-ph{width:38px;height:52px;border-radius:5px;border:1px solid var(--line-2);background:linear-gradient(196deg,#22222A,#16161C);flex-shrink:0}
+  .leg .thumb,.leg .thumb-ph{width:38px;height:52px;border-radius:5px;flex-shrink:0;cursor:zoom-in}
+  .leg .thumb{object-fit:cover;border:1px solid var(--line-2);background:var(--raise-2)}
+  .leg .thumb-ph{border:1px solid var(--line-2);background:linear-gradient(196deg,#22222A,#16161C)}
   .leg .info{min-width:0;flex:1}
   .leg .ti{font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .leg .mt{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
   .leg .amt{font-family:var(--mono);font-size:12.5px;font-weight:600;flex-shrink:0}
   .empty{padding:30px 18px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
 
-  .linker{background:var(--raise);border:1px solid var(--line-2);border-radius:14px;padding:18px;margin-bottom:30px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end}
-  .linker .msg{grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--t3);min-height:14px}
+  .linker{background:var(--raise);border:1px solid var(--line-2);border-radius:14px;padding:18px;margin-bottom:30px}
+  .linker .lh{font-family:var(--disp);font-size:14px;font-weight:700;margin-bottom:14px}
+  .linker .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .linker .foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:14px;flex-wrap:wrap}
+  .linker .msg{font-family:var(--mono);font-size:11px;color:var(--t3)}
 
   .cards-panel{background:var(--raise);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .cards-panel .col-head{border-bottom:1px solid var(--line)}
-  .card-row{display:grid;grid-template-columns:46px 1fr repeat(4,auto) auto;gap:16px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .card-row{display:grid;grid-template-columns:46px 1fr repeat(4,auto) auto;gap:16px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);cursor:pointer}
   .card-row:last-child{border-bottom:none}
-  .card-row .thumb{width:46px;height:62px;border-radius:6px;object-fit:cover;border:1px solid var(--line-2);background:var(--raise-2)}
-  .card-row .thumb-ph{width:46px;height:62px;border-radius:6px;border:1px solid var(--line-2);background:linear-gradient(196deg,#22222A,#16161C)}
+  .card-row:hover{background:rgba(255,255,255,.02)}
+  .card-row .thumb,.card-row .thumb-ph{width:46px;height:62px;border-radius:6px}
+  .card-row .thumb{object-fit:cover;border:1px solid var(--line-2);background:var(--raise-2)}
+  .card-row .thumb-ph{border:1px solid var(--line-2);background:linear-gradient(196deg,#22222A,#16161C)}
   .rip{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--amber);background:var(--amber-soft);border:1px solid var(--amber-edge);padding:2px 7px;border-radius:5px;display:inline-block;margin-bottom:4px}
   .card-row .ti{font-size:13px;font-weight:500;letter-spacing:-.01em}
+  .card-row .idl{font-family:var(--mono);font-size:9.5px;color:var(--t3);margin-top:2px}
   .cell{font-family:var(--mono);text-align:right}
   .cell .cl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:3px}
   .cell .cv{font-size:13px;font-weight:600}
   .gain{color:var(--green)}.loss{color:var(--red)}.dim{color:var(--t3)}
   .unpair{background:none;border:1px solid var(--line-2);color:var(--t3);font-family:var(--mono);font-size:10px;padding:5px 9px;border-radius:6px;cursor:pointer}
   .unpair:hover{border-color:var(--red);color:var(--red)}
+
+  /* Detail modal */
+  .ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.86);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+  .ov.open{display:flex}
+  .modal{background:var(--raise);border:1px solid var(--line-2);border-radius:18px;width:100%;max-width:780px;max-height:90vh;overflow:auto;position:relative}
+  .modal-x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--line);border:none;color:var(--t2);font-size:17px;cursor:pointer;z-index:2}
+  .modal-x:hover{background:var(--line-2)}
+  .mbody{display:grid;grid-template-columns:240px 1fr;gap:0}
+  .mimg{background:var(--raise-2);border-right:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:22px}
+  .mimg img{max-width:100%;max-height:360px;border-radius:8px;border:1px solid var(--line-2)}
+  .mimg .ph{width:180px;height:250px;border-radius:8px;border:1px solid var(--line-2);background:linear-gradient(196deg,#22222A,#16161C);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--t3)}
+  .mmain{padding:26px}
+  .mmain .rip{margin-bottom:8px}
+  .mmain h3{font-family:var(--disp);font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.3;margin-bottom:14px}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .info-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+  .info-line .k{color:var(--t3);font-family:var(--mono);font-size:11px}
+  .info-line .v{font-family:var(--mono);font-weight:600;text-align:right}
+  .mlinks{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .mlinks a{font-family:var(--mono);font-size:11px;border:1px solid var(--line-2);padding:7px 12px;border-radius:7px;color:var(--t1)}
+  .mlinks a:hover{border-color:var(--amber);color:var(--amber)}
+  .msave{margin-top:16px}
 
   .gate{position:fixed;inset:0;background:var(--ink);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
   .gate-card{background:var(--raise);border:1px solid var(--line-2);border-radius:16px;padding:36px;max-width:400px;width:100%}
@@ -98,10 +126,12 @@
 
   @media(max-width:820px){
     .cols{grid-template-columns:1fr}
-    .linker{grid-template-columns:1fr 1fr}
+    .linker .grid{grid-template-columns:1fr 1fr}
     .addbuy .row{grid-template-columns:1fr 1fr}
     .card-row{grid-template-columns:46px 1fr;grid-auto-rows:auto}
     .card-row .cell{text-align:left}
+    .mbody{grid-template-columns:1fr}
+    .mimg{border-right:none;border-bottom:1px solid var(--line)}
   }
 </style>
 </head>
@@ -132,7 +162,7 @@
     <div class="page-head">
       <div class="sub">THE CARD ID SYSTEM</div>
       <h1>Pair buys to sells</h1>
-      <p>Add a purchase, then select it on the left and its matching sale on the right, add any grading cost, and link them into a RIP card with true ROI. Buy and sell can be on different platforms.</p>
+      <p>Add a purchase, select it with its matching sale, record the card's identity (serial, grade, cert), and link into a RIP card. Click any thumbnail or paired card to open its detail panel.</p>
     </div>
 
     <div class="addbuy">
@@ -148,10 +178,10 @@
         </div>
         <div class="field"><label>Date</label><input type="date" id="aDate"></div>
         <div class="field"><label>Price ($)</label><input type="number" step="0.01" id="aPrice" placeholder="0.00"></div>
-        <div class="field"><label>Shipping in ($)</label><input type="number" step="0.01" id="aShip" placeholder="0.00"></div>
+        <div class="field"><label>Grading Fees ($)</label><input type="number" step="0.01" id="aGrade" placeholder="0.00"></div>
         <button class="btn btn-amber" id="addBuyBtn">Add purchase</button>
       </div>
-      <div class="msg" id="addMsg"></div>
+      <div class="msg" id="addMsg">Shipping &amp; taxes are assumed to be included in the price.</div>
     </div>
 
     <div class="cols">
@@ -166,11 +196,21 @@
     </div>
 
     <div class="linker">
-      <div class="field"><label>Grading cost ($)</label><input type="number" step="0.01" id="pGrade" placeholder="0.00"></div>
-      <div class="field"><label>Other cost ($)</label><input type="number" step="0.01" id="pOther" placeholder="0.00"></div>
-      <div class="field"><label>Card title (optional)</label><input type="text" id="pTitle" placeholder="defaults to sale title"></div>
-      <button class="btn btn-amber" id="linkBtn" disabled>Link into RIP card</button>
-      <div class="msg" id="linkMsg">Select a purchase and/or a sale to begin.</div>
+      <div class="lh">Link selected legs into a RIP card</div>
+      <div class="grid">
+        <div class="field"><label>Grading company</label>
+          <select id="pCo"><option value="">— none / raw —</option><option>PSA</option><option>BGS</option><option>SGC</option><option>CGC</option><option>Other</option></select>
+        </div>
+        <div class="field"><label>Grade</label><input type="text" id="pGrade" placeholder="e.g. 10"></div>
+        <div class="field"><label>Cert number</label><input type="text" id="pCert" placeholder="e.g. 84512096"></div>
+        <div class="field"><label>Serial</label><input type="text" id="pSerial" placeholder="e.g. 113/150"></div>
+        <div class="field"><label>Other cost ($)</label><input type="number" step="0.01" id="pOther" placeholder="0.00"></div>
+        <div class="field"><label>Card title (optional)</label><input type="text" id="pTitle" placeholder="defaults to sale title"></div>
+      </div>
+      <div class="foot">
+        <span class="msg" id="linkMsg">Select a purchase and/or a sale to begin.</span>
+        <button class="btn btn-amber" id="linkBtn" disabled>Link into RIP card</button>
+      </div>
     </div>
 
     <div class="cards-panel">
@@ -180,155 +220,120 @@
   </div>
 </main>
 
+<!-- Detail modal -->
+<div class="ov" id="ov">
+  <div class="modal">
+    <button class="modal-x" id="ovX">×</button>
+    <div class="mbody" id="ovBody"></div>
+  </div>
+</div>
+
 <script>
   var KEY = sessionStorage.getItem('ripster_key') || '';
-  var TXNS = [], selBuy = null, selSell = null;
+  var TXNS = [], CARDS = [], selBuy = null, selSell = null;
 
   function fmt(n){var v=Number(n)||0;var s=Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});return (v<0?'−$':'$')+s;}
   function fmtDate(d){if(!d)return '';return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-  function esc(s){return String(s||'').replace(/</g,'&lt;');}
+  function esc(s){return String(s||'').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
   function showGate(e){document.getElementById('gate').style.display='flex';document.getElementById('gateErr').style.display=e?'block':'none';}
   function hideGate(){document.getElementById('gate').style.display='none';}
+  function thumb(t,cls){return t.image_url?'<img class="thumb" src="'+esc(t.image_url)+'" alt="">':'<div class="thumb-ph"></div>';}
+  function ebaySearch(title){return 'https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(title||'');}
 
-  function thumb(t){return t.image_url?'<img class="thumb" src="'+esc(t.image_url)+'" alt="" loading="lazy">':'<div class="thumb-ph"></div>';}
+  // ---------- Detail modal ----------
+  var ov=document.getElementById('ov');
+  function closeOv(){ov.classList.remove('open');document.getElementById('ovBody').innerHTML='';}
+  document.getElementById('ovX').addEventListener('click',closeOv);
+  ov.addEventListener('click',function(e){if(e.target===ov)closeOv();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeOv();});
 
-  function renderLegs(){
-    var buys = TXNS.filter(function(t){return t.txn_type==='purchase' && !t.card_id;});
-    var sells = TXNS.filter(function(t){return t.txn_type==='sale' && !t.card_id;});
-    var bl = document.getElementById('buyList');
-    var sl = document.getElementById('sellList');
+  function imgBlock(url){return url?'<img src="'+esc(url)+'" alt="">':'<div class="ph">NO IMAGE</div>';}
 
-    bl.innerHTML = buys.length ? buys.map(function(t){
-      return '<div class="leg'+(selBuy===t.id?' sel':'')+'" data-buy="'+t.id+'">'+thumb(t)
-        +'<div class="info"><div class="ti">'+esc(t.description||'—')+'</div>'
-        +'<div class="mt">'+esc(t.platform||'')+' · '+fmtDate(t.txn_date)+'</div></div>'
-        +'<div class="amt loss">'+fmt(t.gross_amount)+'</div></div>';
-    }).join('') : '<div class="empty">No unpaired purchases yet. Add one above.</div>';
-
-    sl.innerHTML = sells.length ? sells.map(function(t){
-      return '<div class="leg'+(selSell===t.id?' sel':'')+'" data-sell="'+t.id+'">'+thumb(t)
-        +'<div class="info"><div class="ti">'+esc(t.description||'—')+'</div>'
-        +'<div class="mt">'+esc(t.platform||'')+' · '+fmtDate(t.txn_date)+'</div></div>'
-        +'<div class="amt gain">'+fmt(t.net_amount)+'</div></div>';
-    }).join('') : '<div class="empty">No unpaired sales. Hit Sync eBay on the dashboard.</div>';
-
-    bl.querySelectorAll('[data-buy]').forEach(function(el){el.addEventListener('click',function(){selBuy=(selBuy===el.dataset.buy)?null:el.dataset.buy;renderLegs();updateLinker();});});
-    sl.querySelectorAll('[data-sell]').forEach(function(el){el.addEventListener('click',function(){selSell=(selSell===el.dataset.sell)?null:el.dataset.sell;renderLegs();updateLinker();});});
+  function openTxnDetail(t){
+    var rows='';
+    function line(k,v){return v?'<div class="info-line"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>':'';}
+    rows+=line('Platform',t.platform);
+    rows+=line('Type',t.txn_type);
+    rows+=line('Date',fmtDate(t.txn_date));
+    rows+=line('Order',t.order_id);
+    rows+=line('Buyer',t.buyer);
+    rows+='<div class="info-line"><span class="k">Gross</span><span class="v">'+fmt(t.gross_amount)+'</span></div>';
+    if(Number(t.fees))rows+='<div class="info-line"><span class="k">Fees</span><span class="v loss">−'+fmt(t.fees)+'</span></div>';
+    rows+='<div class="info-line"><span class="k">Net</span><span class="v '+((Number(t.net_amount)||0)>=0?'gain':'loss')+'">'+fmt(t.net_amount)+'</span></div>';
+    var html='<div class="mimg">'+imgBlock(t.image_url)+'</div>'
+      +'<div class="mmain"><h3>'+esc(t.description||'Transaction')+'</h3>'+rows
+      +'<div class="mlinks"><a href="'+ebaySearch(t.description)+'" target="_blank" rel="noopener">Search eBay</a>'
+      +'<a href="https://www.psacard.com/cert" target="_blank" rel="noopener">PSA cert lookup</a></div></div>';
+    document.getElementById('ovBody').innerHTML=html;
+    ov.classList.add('open');
   }
 
-  function updateLinker(){
-    var btn=document.getElementById('linkBtn');
-    btn.disabled = !(selBuy||selSell);
-    var msg=document.getElementById('linkMsg');
-    if(selBuy&&selSell) msg.textContent='Ready to link a buy and a sell into a closed RIP card.';
-    else if(selBuy) msg.textContent='Buy selected — add a sale to compute ROI, or link as an open position.';
-    else if(selSell) msg.textContent='Sale selected — add a buy to compute ROI, or link as a sale-only card.';
-    else msg.textContent='Select a purchase and/or a sale to begin.';
-  }
-
-  function renderCards(cards){
-    var list=document.getElementById('cardList');
-    document.getElementById('cardCount').textContent=cards.length+' cards';
-    if(!cards.length){list.innerHTML='<div class="empty">No paired cards yet.</div>';return;}
-    list.innerHTML=cards.map(function(c){
-      var roi=c.realized_gain;
-      var roiCell = roi===null
-        ? '<div class="cell"><div class="cl">ROI</div><div class="cv dim">open</div></div>'
-        : '<div class="cell"><div class="cl">True ROI</div><div class="cv '+(roi>=0?'gain':'loss')+'">'+fmt(roi)+'</div></div>';
-      var img=c.image_url?'<img class="thumb" src="'+esc(c.image_url)+'" alt="">':'<div class="thumb-ph"></div>';
-      return '<div class="card-row">'+img
-        +'<div><span class="rip">'+esc(c.rip_id)+'</span><div class="ti">'+esc(c.title||'—')+'</div></div>'
-        +'<div class="cell"><div class="cl">Cost basis</div><div class="cv dim">'+fmt(c.cost_basis)+'</div></div>'
-        +'<div class="cell"><div class="cl">Grading</div><div class="cv dim">'+(Number(c.grading_cost)?fmt(c.grading_cost):'—')+'</div></div>'
-        +'<div class="cell"><div class="cl">Net proceeds</div><div class="cv">'+fmt(c.net_proceeds)+'</div></div>'
-        +roiCell
-        +'<button class="unpair" data-unpair="'+c.id+'">Unpair</button>'
-        +'</div>';
-    }).join('');
-    list.querySelectorAll('[data-unpair]').forEach(function(el){
-      el.addEventListener('click',async function(){
-        el.disabled=true;
-        await fetch('/api/pair?unpair='+encodeURIComponent(el.dataset.unpair)+'&key='+encodeURIComponent(KEY),{method:'POST'});
-        await loadAll();
-      });
+  function openCardDetail(c){
+    function f(id,label,val,ph){return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+esc(val||'')+'" placeholder="'+(ph||'')+'"></div>';}
+    var company='<div class="field"><label>Grading company</label><select id="dCo">'
+      +['','PSA','BGS','SGC','CGC','Other'].map(function(o){return '<option'+((c.grading_company||'')===o?' selected':'')+'>'+(o||'— none / raw —')+'</option>';}).join('')
+      +'</select></div>';
+    var pl='https://www.psacard.com/cert/'+encodeURIComponent(c.cert_number||'');
+    var html='<div class="mimg">'+imgBlock(c.image_url)+'</div>'
+      +'<div class="mmain"><span class="rip">'+esc(c.rip_id)+'</span>'
+      +'<h3>'+esc(c.title||'Card')+'</h3>'
+      +'<div class="mgrid">'
+      + f('dTitle','Title',c.title)
+      + f('dPlayer','Player',c.player)
+      + f('dYear','Year',c.year)
+      + f('dSet','Set',c.set_name)
+      + f('dNum','Card #',c.card_number)
+      + f('dPar','Parallel / color',c.parallel)
+      + f('dSerial','Serial',c.serial,'e.g. 113/150')
+      + company
+      + f('dGrade','Grade',c.grade)
+      + f('dCert','Cert number',c.cert_number)
+      +'</div>'
+      +'<div class="mgrid">'
+      +'<div class="info-line"><span class="k">Cost basis</span><span class="v dim">'+fmt(c.cost_basis)+'</span></div>'
+      +'<div class="info-line"><span class="k">Net proceeds</span><span class="v">'+fmt(c.net_proceeds)+'</span></div>'
+      +'<div class="info-line"><span class="k">Grading</span><span class="v dim">'+(Number(c.grading_cost)?fmt(c.grading_cost):'—')+'</span></div>'
+      +'<div class="info-line"><span class="k">True ROI</span><span class="v '+((c.realized_gain||0)>=0?'gain':'loss')+'">'+(c.realized_gain===null?'open':fmt(c.realized_gain))+'</span></div>'
+      +'</div>'
+      +'<div class="mlinks"><a href="'+ebaySearch(c.title)+'" target="_blank" rel="noopener">Search eBay</a>'
+      + (c.cert_number?'<a href="'+pl+'" target="_blank" rel="noopener">PSA cert lookup</a>':'')
+      +'</div>'
+      +'<button class="btn btn-amber msave" id="dSave" data-id="'+c.id+'">Save card details</button>'
+      +'<span class="msg" id="dMsg" style="font-family:var(--mono);font-size:11px;color:var(--t3);margin-left:10px"></span>'
+      +'</div>';
+    document.getElementById('ovBody').innerHTML=html;
+    ov.classList.add('open');
+    document.getElementById('dSave').addEventListener('click',async function(){
+      var btn=this,msg=document.getElementById('dMsg');btn.disabled=true;msg.textContent='Saving…';
+      var payload={
+        title:val('dTitle'),player:val('dPlayer'),year:val('dYear'),set_name:val('dSet'),
+        card_number:val('dNum'),parallel:val('dPar'),serial:val('dSerial'),
+        grading_company:(document.getElementById('dCo').value||''),grade:val('dGrade'),cert_number:val('dCert')
+      };
+      if(payload.grading_company.indexOf('none')>-1)payload.grading_company='';
+      try{
+        var r=await fetch('/api/pair?update='+encodeURIComponent(btn.dataset.id)+'&key='+encodeURIComponent(KEY),
+          {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        var out=await r.json();
+        if(out.ok){msg.textContent='Saved.';msg.style.color='var(--green)';await loadAll();}
+        else{msg.textContent='Failed — see console';console.error(out);}
+      }catch(e){msg.textContent='Failed — see console';console.error(e);}
+      btn.disabled=false;
     });
   }
+  function val(id){var el=document.getElementById(id);return el?el.value.trim():'';}
 
-  async function loadAll(){
-    try{
-      var dRes=await fetch('/api/data?key='+encodeURIComponent(KEY));
-      if(dRes.status===401){sessionStorage.removeItem('ripster_key');showGate(true);return;}
-      hideGate();
-      var d=await dRes.json();
-      TXNS=d.transactions||[];
-      selBuy=null;selSell=null;
-      renderLegs();updateLinker();
-      var cRes=await fetch('/api/pair?key='+encodeURIComponent(KEY));
-      var c=await cRes.json();
-      renderCards(c.cards||[]);
-    }catch(e){
-      document.getElementById('cardList').innerHTML='<div class="empty">Could not load — refresh.</div>';
-    }
-  }
+  // ---------- Lists ----------
+  function renderLegs(){
+    var buys=TXNS.filter(function(t){return t.txn_type==='purchase'&&!t.card_id;});
+    var sells=TXNS.filter(function(t){return t.txn_type==='sale'&&!t.card_id;});
+    var bl=document.getElementById('buyList'),sl=document.getElementById('sellList');
 
-  document.getElementById('gateGo').addEventListener('click',function(){
-    KEY=document.getElementById('gateKey').value.trim();
-    if(!KEY)return;
-    sessionStorage.setItem('ripster_key',KEY);
-    loadAll();
-  });
-  document.getElementById('gateKey').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('gateGo').click();});
+    bl.innerHTML=buys.length?buys.map(function(t){
+      return '<div class="leg'+(selBuy===t.id?' sel':'')+'" data-buy="'+t.id+'">'+thumb(t)
+        +'<div class="info"><div class="ti">'+esc(t.description||'—')+'</div>'
+        +'<div class="mt">'+esc(t.platform||'')+' · '+fmtDate(t.txn_date)+(Number(t.fees)?' · grading '+fmt(t.fees):'')+'</div></div>'
+        +'<div class="amt loss">'+fmt(t.gross_amount)+'</div></div>';
+    }).join(''):'<div class="empty">No unpaired purchases yet. Add one above.</div>';
 
-  // ----- Add a purchase (inline) -----
-  document.getElementById('addBuyBtn').addEventListener('click',async function(){
-    var btn=this,msg=document.getElementById('addMsg');
-    var payload={
-      txn_type:'purchase',
-      platform:document.getElementById('aPlat').value,
-      txn_date:document.getElementById('aDate').value,
-      description:document.getElementById('aDesc').value.trim(),
-      gross:document.getElementById('aPrice').value,
-      shipping:document.getElementById('aShip').value,
-      fees:0
-    };
-    if(!payload.description||!payload.gross){msg.textContent='Description and price are required.';msg.style.color='var(--red)';return;}
-    btn.disabled=true;msg.textContent='Adding…';msg.style.color='var(--t3)';
-    try{
-      var res=await fetch('/api/manual?key='+encodeURIComponent(KEY),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-      var out=await res.json();
-      if(out.ok){
-        document.getElementById('aDesc').value='';
-        document.getElementById('aPrice').value='';
-        document.getElementById('aShip').value='';
-        msg.textContent='Added — now select it on the left to pair.';msg.style.color='var(--green)';
-        await loadAll();
-      }else{msg.textContent='Failed — see console';msg.style.color='var(--red)';console.error(out);}
-    }catch(e){msg.textContent='Failed — see console';msg.style.color='var(--red)';console.error(e);}
-    btn.disabled=false;
-  });
-
-  document.getElementById('linkBtn').addEventListener('click',async function(){
-    var btn=this,msg=document.getElementById('linkMsg');
-    btn.disabled=true;msg.textContent='Linking…';
-    var payload={
-      buy_txn_id:selBuy,sell_txn_id:selSell,
-      grading_cost:document.getElementById('pGrade').value,
-      other_cost:document.getElementById('pOther').value,
-      title:document.getElementById('pTitle').value.trim()
-    };
-    try{
-      var res=await fetch('/api/pair?key='+encodeURIComponent(KEY),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-      var out=await res.json();
-      if(out.ok){
-        document.getElementById('pGrade').value='';
-        document.getElementById('pOther').value='';
-        document.getElementById('pTitle').value='';
-        await loadAll();
-      }else{msg.textContent='Failed — see console';console.error(out);}
-    }catch(e){msg.textContent='Failed — see console';console.error(e);}
-  });
-
-  if(KEY){loadAll();}else{showGate(false);}
-</script>
-</body>
-</html>
+    sl.innerHTML=sells.length?sells.map(function(
